@@ -1,0 +1,5 @@
+{
+  "Node Desc": "Basic information, status information, scheduling information of nodes.",
+  "Fault Desc": "System detects faults in nodes, GPUs, network cards, hard drives, etc., and performs automatic repairs, as well as recording offline operations and maintenance.",
+  "Fault placeholder": "UUID and XID Search"
+}

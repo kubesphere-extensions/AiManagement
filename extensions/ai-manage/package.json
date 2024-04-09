@@ -1,0 +1,13 @@
+{
+  "name": "ai-manage",
+  "description": "ai-manage",
+  "author": "zhouxuexin",
+  "version": "1.0.0",
+  "homepage": "",
+  "main": "dist/index.js",
+  "files": ["dist"],
+  "dependencies": {
+    "react-hook-form": "7.43.5",
+    "file-saver": "^2.0.5"
+  }
+}
