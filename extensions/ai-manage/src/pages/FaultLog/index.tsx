@@ -39,7 +39,7 @@ function FaultLog() {
       title: t('Belonging Compute Pool'),
       field: 'gpu_node_compute_group',
       canHide: true,
-      render: (v, row) => v || '-',
+      render: (v, row) => v || '共享计算池',
     },
     {
       title: t('Fault ID'),

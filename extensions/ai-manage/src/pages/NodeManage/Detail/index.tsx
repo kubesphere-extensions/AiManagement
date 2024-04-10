@@ -166,7 +166,7 @@ function NodeDetail() {
       },
       {
         label: t('Belonging Compute Pool'),
-        value: node?.node_compute_group ?? '-',
+        value: node?.node_compute_group || '共享计算池',
       },
       {
         label: 'IPM IP',

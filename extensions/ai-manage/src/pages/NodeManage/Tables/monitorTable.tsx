@@ -443,6 +443,19 @@ function Node({ renderTabs, setShowTab, tab }: Props) {
             );
           },
         },
+        {
+          title: t('GPU allocated'),
+          field: 'gpu_used',
+          canHide: true,
+          render: (_value, row) => {
+            const current = computedGroup?.[row?.name];
+            return (
+              <span>
+                {current?.gpu_used ?? 0}/{current?.gpu_total ?? 0}
+              </span>
+            );
+          },
+        },
         ...(hasExtensionModuleAnnotation(
           'whizard-monitoring',
           'monitoring.kubesphere.io/enable-gpu-monitoring',
@@ -613,6 +626,19 @@ function Node({ renderTabs, setShowTab, tab }: Props) {
         },
       },
       {
+        title: t('GPU allocated'),
+        field: 'gpu_used',
+        canHide: true,
+        render: (_value, row) => {
+          const current = computedGroup?.[row?.name];
+          return (
+            <span>
+              {current?.gpu_used ?? 0}/{current?.gpu_total ?? 0}
+            </span>
+          );
+        },
+      },
+      {
         title: t('GPU Model'),
         field: 'node_gpu_model',
         render: (_v, row) => get(listData, [row.name, 'node_gpu_model'], '-'),
@@ -719,7 +745,7 @@ function Node({ renderTabs, setShowTab, tab }: Props) {
       field: 'gpu_node_compute_group',
       canHide: true,
       render: (_v, row) => {
-        return computedGroup?.[row?.name]?.gpu_node_compute_group || '-';
+        return computedGroup?.[row?.name]?.gpu_node_compute_group || '共享计算池';
       },
     },
     ...renderColumns(),
