@@ -1,25 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Banner } from '@kubed/components';
 import { Nodes } from '@kubed/icons';
 import { Card, Field } from '@kubed/components';
 import { get } from 'lodash';
-import {
-  DataTable,
-  formatTime,
-  StatusIndicator,
-  transformRequestParams,
-  Column,
-} from '@ks-console/shared';
-import { useParams, Link } from 'react-router-dom';
+import { DataTable, formatTime, StatusIndicator, Column, TableRef } from '@ks-console/shared';
+import { Link } from 'react-router-dom';
 
 import { FullRow, FullCol, StyledEntity, StyledField, FieldLabel } from './styles';
 import { Waring } from '../../icons';
 
 function FaultLog() {
+  const tableRef = useRef<TableRef>();
   const [unprocessed, setUnprocessed] = useState(0);
   const [processed, setProcessed] = useState(0);
+  const [status, setStatus] = useState<number | undefined>(undefined);
 
-  const { name } = useParams();
   const columns: Column[] = [
     {
       title: t('Node Name'),
@@ -108,14 +103,28 @@ function FaultLog() {
     },
   ];
 
-  const formatServerData = (serverData: Record<string, any>) => {
-    const data = get(serverData, 'data[0]');
+  const handleChangeStatus = (_status: number) => {
+    if (_status === status) {
+      setStatus(undefined);
+      return;
+    }
+    setStatus(_status);
+  };
+
+  const changeProcessed = (data: any) => {
     setProcessed(data?.fault_treated ?? 0);
     setUnprocessed(data?.fault_untreated ?? 0);
+  };
+
+  const formatServerData = (serverData: Record<string, any>) => {
+    const data = get(serverData, 'data[0]');
+
+    changeProcessed(data);
 
     return {
       items: data?.fault_records || [],
       totalItems: data?.counts || 0,
+      other: data,
     };
   };
 
@@ -132,32 +141,34 @@ function FaultLog() {
           <FullRow>
             <FullCol span={3}>
               <StyledField
+                active={status === 0}
                 avatar={<Waring size={40} />}
                 label={t('Unprocessed')}
                 value={unprocessed}
+                onClick={() => handleChangeStatus(0)}
               />
             </FullCol>
             <FullCol span={8}>
-              <Field label={t('Processed')} value={processed} />
+              <StyledField
+                active={status === 1}
+                label={t('Processed')}
+                value={processed}
+                onClick={() => handleChangeStatus(1)}
+              />
             </FullCol>
           </FullRow>
         </StyledEntity>
       </Card>
       <DataTable
+        ref={tableRef}
         tableName="record"
         rowKey="dev_gpu_uuid"
         placeholder={t('Fault placeholder')}
         url="/kapis/aicp.kubesphere.io/v1/gpu/list_gpu_fault_record"
-        parameters={{ gpu_node_id: name }}
+        parameters={{ fault_status: status }}
         columns={columns}
         serverDataFormat={formatServerData}
         simpleSearch
-        transformRequestParams={params => {
-          const p = transformRequestParams(params as any);
-          return {
-            ...p,
-          };
-        }}
         emptyOptions={{
           withoutTable: true,
           image: <Waring size={48} />,

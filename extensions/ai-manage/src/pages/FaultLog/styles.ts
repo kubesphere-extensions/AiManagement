@@ -14,6 +14,9 @@ export const StyledField = styled(Field)`
   align-items: flex-start;
   .field-label {
     white-space: break-spaces;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    border-color: ${props => (props.active ? '#55bc8a' : 'transparent')};
   }
 `;
 export const FieldLabel = styled.div`

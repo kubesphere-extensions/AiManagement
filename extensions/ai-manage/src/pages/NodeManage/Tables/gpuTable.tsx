@@ -140,6 +140,7 @@ function GpuTable({ renderTabs }: Props) {
       toolbarLeft={renderTabs()}
       columns={columns}
       serverDataFormat={formatServerData}
+      showFooter={false}
     />
   );
 }
