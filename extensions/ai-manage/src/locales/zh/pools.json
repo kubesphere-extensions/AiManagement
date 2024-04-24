@@ -1,0 +1,22 @@
+{
+  "Computing pools": "算力池",
+  "Computing pools manage": "算力池管理",
+  "COMPUTING_POOLS_DESC": "将资源按照业务应用形式和芯片型号划分不同的算力池，算力池内节点选择将会通过具体的配置需求进行匹配",
+  "Create computing pools": "创建算力池",
+  "Base information": "基础信息",
+  "Node configurations": "节点配置",
+  "Name": "名称",
+  "Ai pods type": "规格类型",
+  "AIpods type": "规格类型",
+  "Description": "描述",
+  "Please input name.": "请输入名称。",
+  "Please select ai pods type.": "请选择规格类型。",
+  "Status": "状态",
+  "Node counts": "节点数量",
+  "GPU counts": "GPU 数量",
+  "Create time": "创建时间",
+  "Add nodes": "添加节点",
+  "Remove nodes": "移除节点",
+  "Edit pool": "编辑算力池",
+  "Delete pool": "删除算力池"
+}
