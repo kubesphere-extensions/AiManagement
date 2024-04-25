@@ -18,5 +18,7 @@
   "Add nodes": "添加节点",
   "Remove nodes": "移除节点",
   "Edit pool": "编辑算力池",
-  "Delete pool": "删除算力池"
+  "Delete pool": "删除算力池",
+  "Confirm to delete pool {items} ?": "确认删除算力池 {items} ？",
+  "Confirm to remove node {items} ?": "确认移除节点 {items} ？"
 }

@@ -8,6 +8,7 @@ import FaultLog from '../pages/FaultLog';
 import ComputingPools from '../pages/ComputingPools';
 
 import nodeDetailRoutes from '../pages/NodeManage/Detail/router'
+import poolDetailRouters from '../pages/ComputingPools/Detail/router';
 
 export default [
   {
@@ -37,5 +38,6 @@ export default [
       },
     ],
   },
-  ...nodeDetailRoutes
+  ...nodeDetailRoutes,
+  ...poolDetailRouters,
 ];
