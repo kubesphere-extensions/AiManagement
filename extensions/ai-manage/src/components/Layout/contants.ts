@@ -27,6 +27,9 @@ export const navs = [
   {
     name: 'cluster manage',
     title: '集群管理',
-    children: [{ name: 'nodes', title: 'Node Manage', icon: 'nodes' ,}]
+    children: [
+      { name: 'nodes', title: 'Node Manage', icon: 'nodes' },
+      { name: 'pools', title: 'Computing pools manage', icon: 'resource' },
+    ]
   }
 ];

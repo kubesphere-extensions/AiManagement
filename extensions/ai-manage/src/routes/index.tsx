@@ -4,9 +4,11 @@ import Layout from '../components/Layout';
 import Overview from '../pages/Overview';
 import Dashboard from '../pages/Dashboard';
 import NodeManage from '../pages/NodeManage';
-import FaultLog from '../pages/FaultLog'
+import FaultLog from '../pages/FaultLog';
+import ComputingPools from '../pages/ComputingPools';
 
 import nodeDetailRoutes from '../pages/NodeManage/Detail/router'
+import poolDetailRouters from '../pages/ComputingPools/Detail/router';
 
 export default [
   {
@@ -27,10 +29,15 @@ export default [
         element: <NodeManage />,
       },
       {
+        path: ':cluster/pools',
+        element: <ComputingPools />,
+      },
+      {
         path: ':cluster/fault',
         element: <FaultLog />,
       },
     ],
   },
-  ...nodeDetailRoutes
+  ...nodeDetailRoutes,
+  ...poolDetailRouters,
 ];
