@@ -22,11 +22,16 @@ export const navs = [
   {
     name: 'O&M Management',
     title: '运维管理',
-    children: [{ name: 'fault', title: 'Fault Log', icon: 'error' ,}]
+    children: [{ name: 'fault', title: 'Fault Log', icon: 'error', }]
   },
   {
-    name: 'cluster manage',
+    name: 'Cluster Management',
     title: '集群管理',
-    children: [{ name: 'nodes', title: 'Node Manage', icon: 'nodes' ,}]
-  }
+    children: [{ name: 'nodes', title: 'Node Manage', icon: 'nodes', }]
+  },
+  {
+    name: 'Container Management',
+    title: '容器管理',
+    children: [{ name: 'training', title: 'Distributed training', icon: 'topology', }]
+  },
 ];

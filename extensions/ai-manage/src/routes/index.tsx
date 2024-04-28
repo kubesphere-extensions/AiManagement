@@ -4,9 +4,10 @@ import Layout from '../components/Layout';
 import Overview from '../pages/Overview';
 import Dashboard from '../pages/Dashboard';
 import NodeManage from '../pages/NodeManage';
-import FaultLog from '../pages/FaultLog'
+import FaultLog from '../pages/FaultLog';
+import Training from '../pages/Traing';
 
-import nodeDetailRoutes from '../pages/NodeManage/Detail/router'
+import nodeDetailRoutes from '../pages/NodeManage/Detail/router';
 
 export default [
   {
@@ -30,7 +31,11 @@ export default [
         path: ':cluster/fault',
         element: <FaultLog />,
       },
+      {
+        path: ':cluster/training',
+        element: <Training />,
+      },
     ],
   },
-  ...nodeDetailRoutes
+  ...nodeDetailRoutes,
 ];
