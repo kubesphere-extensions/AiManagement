@@ -60,13 +60,13 @@ function GpuTable({ renderTabs }: Props) {
       title: t('GPU UUID'),
       field: 'dev_gpu_uuid',
       canHide: true,
-      render: (v, row) => v || '-',
+      render: (v) => v || '-',
     },
     {
       title: t('GPU Status'),
       field: 'dev_gpu_status',
       canHide: true,
-      render: (value: string, row) => {
+      render: (value: string) => {
         const status = statusMap?.[value] ?? 'Unknown';
         const type = +value === 0 ? 'Running' : 'Warning';
         return (
@@ -80,22 +80,25 @@ function GpuTable({ renderTabs }: Props) {
       title: t('GPU utilization'),
       field: 'dev_gpu_util',
       canHide: true,
-      render: v => (
-        <Field
-          value={
-            <Resource>
-              <span>{toPercentage(+v / 100)}</span>
-            </Resource>
-          }
-        />
-      ),
+      render: (v, row) =>
+        row?.dev_gpu_status === '0' ? (
+          <Field
+            value={
+              <Resource>
+                <span>{toPercentage(+v / 100)}</span>
+              </Resource>
+            }
+          />
+        ) : (
+          '-'
+        ),
     },
     {
       title: t('GPU memory utilization'),
       field: 'dev_gpu_mem_copy_util',
       canHide: true,
-      render: (value, row) => {
-        return (
+      render: (value, row) =>
+        row?.dev_gpu_status === '0' ? (
           <Field
             value={
               <Resource>
@@ -105,8 +108,9 @@ function GpuTable({ renderTabs }: Props) {
             }
             label={`${row.dev_gpu_mem_used}/${row.dev_gpu_mem_total} GiB`}
           />
-        );
-      },
+        ) : (
+          '-'
+        ),
     },
     {
       title: t('命名空间'),

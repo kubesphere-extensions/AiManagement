@@ -7,8 +7,12 @@ import NodeManage from '../pages/NodeManage';
 import FaultLog from '../pages/FaultLog';
 import Training from '../pages/Traing';
 import Xid from '../pages/Xid';
+import PerformanceMonitor from '../pages/PerformanceMonitor';
 
 import nodeDetailRoutes from '../pages/NodeManage/Detail/router';
+import ComputingPools from '../pages/ComputingPools';
+
+import poolDetailRouters from '../pages/ComputingPools/Detail/router';
 
 export default [
   {
@@ -25,8 +29,16 @@ export default [
         element: <Dashboard />,
       },
       {
+        path: ':cluster/performance-monitor',
+        element: <PerformanceMonitor />,
+      },
+      {
         path: ':cluster/nodes',
         element: <NodeManage />,
+      },
+      {
+        path: ':cluster/pools',
+        element: <ComputingPools />,
       },
       {
         path: ':cluster/fault',
@@ -43,4 +55,5 @@ export default [
     ],
   },
   ...nodeDetailRoutes,
+  ...poolDetailRouters,
 ];
