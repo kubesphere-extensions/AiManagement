@@ -30,7 +30,7 @@ const getColumns = (): Column[] => {
       field: 'gpu_err_priority',
       canHide: true,
       render: (v: string) => {
-        const status = v === 'Critical' ? 'Warning' : v === 'Warning' ? 'default' : 'error';
+        const status = v === 'Critical' ? 'Warning' : v === 'Warning' ? 'ready' : 'error';
         return (
           <div>
             <StatusIndicator type={status}>{t(v)}</StatusIndicator>

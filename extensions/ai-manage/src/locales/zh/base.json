@@ -34,9 +34,9 @@
   "Error level": "错误等级",
   "Please enter a description of the error to search": "请输入错误描述搜索",
   "No error message": "暂无错误信息",
-  "Error": "严重",
-  "Critical": "危险",
-  "Warning": "警告",
+  "Error": "危险",
+  "Critical": "警告",
+  "Warning": "提醒",
   "Troubleshooting": "故障处理",
   "Treatment": "处理方式"
 }
