@@ -40,7 +40,7 @@ const getColumns = (): Column[] => {
   };
 
   const handleCopy = () => {
-    notify.success('Copied to clipboard');
+    notify.success(t('Copied to clipboard'));
   };
 
   return [
@@ -54,7 +54,8 @@ const getColumns = (): Column[] => {
           value={<FieldLabel>{row.name || '-'} </FieldLabel>}
           label={
             <ResourceId>
-              <Link to={`/ai-manage/host/training/${row?.uuid}`}>{row?.uuid ?? '-'} </Link>
+              {/* <Link to={`/ai-manage/host/training/${row?.uuid}`}>{row?.uuid ?? '-'} </Link> */}
+              <Link to="">{row?.uuid ?? '-'} </Link>
               <CopyToClipboard text={row?.uuid} onCopy={handleCopy}>
                 <span className="copy">
                   <Copy />

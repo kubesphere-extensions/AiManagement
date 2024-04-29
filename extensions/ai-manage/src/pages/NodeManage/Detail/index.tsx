@@ -162,7 +162,7 @@ function NodeDetail() {
     return [
       {
         label: t('Cluster'),
-        value: node?.node_cluster ?? '-',
+        value: node?.node_cluster || '-',
       },
       {
         label: t('Belonging Compute Pool'),
@@ -170,27 +170,27 @@ function NodeDetail() {
       },
       {
         label: 'IPM IP',
-        value: node?.node_ipmi_ip ?? '-',
+        value: node?.node_ipmi_ip || '-',
       },
       {
         label: t('Server Manufacturer'),
-        value: node?.node_product_company ?? '-',
+        value: node?.node_product_company || '-',
       },
       {
         label: t('Server Model'),
-        value: node?.node_hardware_model ?? '-',
+        value: node?.node_hardware_model || '-',
       },
       {
         label: t('Server Serial Number'),
-        value: node?.node_serial_number ?? '-',
+        value: node?.node_serial_number || '-',
       },
       {
         label: t('Computer room'),
-        value: node?.node_zone ?? '-',
+        value: node?.node_zone || '-',
       },
       {
         label: t('Cabinet'),
-        value: node?.node_location_number ?? '-',
+        value: node?.node_location_number || '-',
       },
     ];
   };
@@ -199,7 +199,7 @@ function NodeDetail() {
     return [
       {
         label: t('CPU Model'),
-        value: node?.node_cpu_model ?? '-',
+        value: node?.node_cpu_model || '-',
       },
       {
         label: t('CPU cores'),
@@ -211,7 +211,7 @@ function NodeDetail() {
       },
       {
         label: t('GPU Model'),
-        value: node?.node_gpu_model ?? '-',
+        value: node?.node_gpu_model || '-',
       },
       {
         label: t('GPU Memory'),

@@ -686,7 +686,7 @@ function Node({ renderTabs, setShowTab, tab }: Props) {
         canHide: true,
         render: (_v, row) => {
           const value = get(listData, [row.name, 'node_ib_count_storage']);
-          return value ? `${value}G` : '-';
+          return value ? `${value}` : '-';
         },
       },
     ] as Column[];

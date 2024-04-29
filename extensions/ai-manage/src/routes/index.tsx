@@ -6,6 +6,7 @@ import Dashboard from '../pages/Dashboard';
 import NodeManage from '../pages/NodeManage';
 import FaultLog from '../pages/FaultLog';
 import Training from '../pages/Traing';
+import Xid from '../pages/Xid';
 
 import nodeDetailRoutes from '../pages/NodeManage/Detail/router';
 
@@ -34,6 +35,10 @@ export default [
       {
         path: ':cluster/training',
         element: <Training />,
+      },
+      {
+        path: ':cluster/xid',
+        element: <Xid />,
       },
     ],
   },

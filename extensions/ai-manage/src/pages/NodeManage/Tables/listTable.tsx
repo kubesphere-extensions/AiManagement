@@ -105,7 +105,7 @@ function ListTable({ renderTabs }: Props) {
       title: t('Number of Storage IB Network Cards'),
       field: 'node_ib_count_storage',
       canHide: true,
-      render: value => (value ? `${value}G` : '-'),
+      render: value => (value ? `${value}` : '-'),
     }
   ];
 

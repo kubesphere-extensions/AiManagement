@@ -1,19 +1,38 @@
 import React, { useState, useRef } from 'react';
-import { Banner } from '@kubed/components';
-import { Nodes } from '@kubed/icons';
-import { Card, Field } from '@kubed/components';
+import { Nodes, More, Hammer } from '@kubed/icons';
+import { Banner, Card, Field, Button, Dropdown, Menu, MenuItem } from '@kubed/components';
 import { get } from 'lodash';
 import { DataTable, formatTime, StatusIndicator, Column, TableRef } from '@ks-console/shared';
 import { Link } from 'react-router-dom';
+import { useDisclosure } from '@kubed/hooks';
 
 import { FullRow, FullCol, StyledEntity, StyledField, FieldLabel } from './styles';
 import { Waring } from '../../icons';
+import TroubleshootingModal from './TroubleshootingModal';
 
 function FaultLog() {
   const tableRef = useRef<TableRef>();
   const [unprocessed, setUnprocessed] = useState(0);
   const [processed, setProcessed] = useState(0);
+  const [id, setID] = useState('');
   const [status, setStatus] = useState<number | undefined>(undefined);
+  const createModal = useDisclosure();
+
+  const MoreActions = ({ row }: { row: any }) => {
+    const handle = () => {
+      if (row.fault_status === '1') return;
+      createModal.open();
+      setID(row?.records_id);
+    };
+
+    return (
+      <Menu>
+        <MenuItem icon={<Hammer />} onClick={handle} disabled={row.fault_status === '1'}>
+          {t('Troubleshooting')}
+        </MenuItem>
+      </Menu>
+    );
+  };
 
   const columns: Column[] = [
     {
@@ -57,7 +76,7 @@ function FaultLog() {
       field: 'dev_gpu_uuid',
       canHide: true,
       width: 200,
-      render: (v, row) => v || '-',
+      render: v => v || '-',
     },
     {
       title: t('Error Code'),
@@ -100,6 +119,17 @@ function FaultLog() {
       width: 200,
       field: 'gpu_suggestions',
       render: (v: string) => (v ? v : '-'),
+    },
+    {
+      id: 'more',
+      title: ' ',
+      render: (_, row) => (
+        <Dropdown placement="bottom-end" content={<MoreActions row={row} />}>
+          <Button variant="text" radius="lg">
+            <More size={16} />
+          </Button>
+        </Dropdown>
+      ),
     },
   ];
 
@@ -175,6 +205,15 @@ function FaultLog() {
           title: t('No record of faults found'),
         }}
         showFooter={false}
+      />
+      <TroubleshootingModal
+        faultID={id}
+        onCancel={() => createModal.close()}
+        visible={createModal.isOpen}
+        onSuccess={() => {
+          tableRef.current?.refetch();
+          createModal.close();
+        }}
       />
     </div>
   );

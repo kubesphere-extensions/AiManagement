@@ -28,5 +28,15 @@
   "Fault Status": "故障状态",
   "Fault Resolution": "故障处理",
   "Fault Advice": "故障建议",
-  "Fault placeholder": "UUID、XID搜索"
+  "Fault placeholder": "UUID、XID搜索",
+  "Xid Desc": "Xid消息是来自英伟达驱动程序的错误报告，会被打印到操作系统的内核日志或事件日志中。Xid消息表示GPU发生了一般性错误，最常见的原因是驱动程序对GPU的编程不正确或发送到GPU的命令被破坏。这些信息可能表示硬件问题、英伟达软件问题或用户应用程序问题。",
+  "Recommendations and measures": "建议与措施",
+  "Error level": "错误等级",
+  "Please enter a description of the error to search": "请输入错误描述搜索",
+  "No error message": "暂无错误信息",
+  "Error": "严重",
+  "Critical": "危险",
+  "Warning": "警告",
+  "Troubleshooting": "故障处理",
+  "Treatment": "处理方式"
 }

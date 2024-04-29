@@ -10,24 +10,28 @@ export const navs = [
       //   title: 'Monitor Dashboard',
       //   icon: 'monitor'
       // },
-      // {
-      //   name: 'alarm-dashboard',
-      //   title: 'Alarm Dashboard',
-      //   icon: 'loudspeaker',
-      //   disabled: true,
-      //   showInDisable: true
-      // },
     ],
   },
   {
     name: 'O&M Management',
     title: '运维管理',
-    children: [{ name: 'fault', title: 'Fault Log', icon: 'error', }]
+    children: [
+      {
+        name: 'xid',
+        title: '错误码管理',
+        icon: 'error',
+      },
+      {
+        name: 'fault',
+        title: 'Fault Log',
+        icon: 'exclamation',
+      },
+    ],
   },
   {
     name: 'Cluster Management',
     title: '集群管理',
-    children: [{ name: 'nodes', title: 'Node Manage', icon: 'nodes', }]
+    children: [{ name: 'nodes', title: 'Node Manage', icon: 'nodes' }],
   },
   {
     name: 'Container Management',

@@ -22,26 +22,26 @@ const StyledTextarea = styled(Textarea)`
   }
 `;
 
-interface EnterLicenseModalProps extends Pick<ModalProps, 'visible' | 'title'> {
+interface Props extends Pick<ModalProps, 'visible' | 'title'> {
   onCancel: () => void;
   onSuccess?: () => void;
-  nodeID: string;
+  faultID: string;
 }
 
-function CreateLogModal({ visible, onSuccess, onCancel, nodeID, ...rest }: EnterLicenseModalProps) {
+function TroubleshootingModal({ visible, onSuccess, onCancel, faultID, ...rest }: Props) {
   const [form] = useForm<any>();
 
   const defaultProps = {
-    title: t('Create New Log'),
+    title: t('Troubleshooting'),
   };
 
   const finalProps = merge({}, defaultProps, rest);
 
   const { mutate, isLoading } = useMutation(
     (fetchParams: any) => {
-      const url = '/kapis/aicp.kubesphere.io/v1/gpu/create_gpu_node_maintain_log?';
-      const _url = `${url}gpu_node_id=${nodeID}&description=${fetchParams.description}`
-      return request.post(_url,);
+      const url = '/kapis/aicp.kubesphere.io/v1/gpu/update_gpu_fault_record';
+      const paramUrl = `${url}?gpu_fault_id=${faultID}&description=${fetchParams.description}`;
+      return request.post(paramUrl);
     },
     {
       onSuccess: () => {
@@ -72,7 +72,7 @@ function CreateLogModal({ visible, onSuccess, onCancel, nodeID, ...rest }: Enter
       >
         <FormItem
           name="description"
-          label={t('Descriptions')}
+          label={t('Treatment')}
           rules={[{ required: true, message: t('Please enter the description') }]}
         >
           <StyledTextarea />
@@ -82,4 +82,4 @@ function CreateLogModal({ visible, onSuccess, onCancel, nodeID, ...rest }: Enter
   );
 }
 
-export default CreateLogModal;
+export default TroubleshootingModal;

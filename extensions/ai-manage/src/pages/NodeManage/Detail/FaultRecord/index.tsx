@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useState } from 'react';
 import {
   Panel,
   DataTable,
@@ -7,9 +7,14 @@ import {
   Icon,
   transformRequestParams,
   Column,
+  TableRef,
 } from '@ks-console/shared';
+import { More, Hammer } from '@kubed/icons';
+import { useDisclosure } from '@kubed/hooks';
+import { Button, Dropdown, Menu, MenuItem } from '@kubed/components';
 import styled from 'styled-components';
 import { useParams } from 'react-router-dom';
+import TroubleshootingModal from '../../../FaultLog/TroubleshootingModal';
 
 export const FieldLabel = styled.div`
   text-overflow: ellipsis;
@@ -23,6 +28,26 @@ export const FieldLabel = styled.div`
 
 function FaultRecord() {
   const { name } = useParams();
+  const [id, setID] = useState('');
+  const tableRef = useRef<TableRef>();
+  const createModal = useDisclosure();
+
+  const MoreActions = ({ row }: { row: any }) => {
+    const handle = () => {
+      if (row.fault_status === '1') return;
+      createModal.open();
+      setID(row?.records_id);
+    };
+
+    return (
+      <Menu>
+        <MenuItem icon={<Hammer />} onClick={handle} disabled={row.fault_status === '1'}>
+          {t('Troubleshooting')}
+        </MenuItem>
+      </Menu>
+    );
+  };
+
   const columns: Column[] = [
     {
       title: t('Fault ID'),
@@ -89,6 +114,17 @@ function FaultRecord() {
       field: 'gpu_suggestions',
       render: (v: string) => (v ? v : '-'),
     },
+    {
+      id: 'more',
+      title: ' ',
+      render: (_, row) => (
+        <Dropdown placement="bottom-end" content={<MoreActions row={row} />}>
+          <Button variant="text" radius="lg">
+            <More size={16} />
+          </Button>
+        </Dropdown>
+      ),
+    },
   ];
 
   const formatServerData = (serverData: Record<string, any>) => {
@@ -99,31 +135,43 @@ function FaultRecord() {
   };
 
   return (
-    <Panel title={t('Fault Log')}>
-      <DataTable
-        tableName="record"
-        rowKey="dev_gpu_uuid"
-        url="/kapis/aicp.kubesphere.io/v1/gpu/list_gpu_fault_record"
-        transformRequestParams={params => {
-          const p = transformRequestParams(params as any);
-          return {
-            ...p,
-            gpu_node_id: name,
-          };
+    <>
+      <Panel title={t('Fault Log')}>
+        <DataTable
+          ref={tableRef}
+          tableName="record"
+          rowKey="dev_gpu_uuid"
+          url="/kapis/aicp.kubesphere.io/v1/gpu/list_gpu_fault_record"
+          transformRequestParams={params => {
+            const p = transformRequestParams(params as any);
+            return {
+              ...p,
+              gpu_node_id: name,
+            };
+          }}
+          placeholder={t('Fault placeholder')}
+          parameters={{ gpu_node_id: name }}
+          columns={columns}
+          serverDataFormat={formatServerData}
+          simpleSearch
+          emptyOptions={{
+            withoutTable: true,
+            image: <Icon name="record" size={48} />,
+            title: t('No record of faults found'),
+          }}
+          showFooter={false}
+        />
+      </Panel>
+      <TroubleshootingModal
+        faultID={id}
+        onCancel={() => createModal.close()}
+        visible={createModal.isOpen}
+        onSuccess={() => {
+          tableRef.current?.refetch();
+          createModal.close();
         }}
-        placeholder={t('Fault placeholder')}
-        parameters={{ gpu_node_id: name }}
-        columns={columns}
-        serverDataFormat={formatServerData}
-        simpleSearch
-        emptyOptions={{
-          withoutTable: true,
-          image: <Icon name="record" size={48} />,
-          title: t('No record of faults found'),
-        }}
-        showFooter={false}
       />
-    </Panel>
+    </>
   );
 }
 
