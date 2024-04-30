@@ -23,5 +23,20 @@
   "End time": "完成时间",
   "Running time": "运行时长",
   "Submitter information": "提交者信息",
-  "Copied to clipboard": "已复制到粘贴板"
+  "Copied to clipboard": "已复制到粘贴板",
+  "Container Instance": "容器实例",
+  "Inatance Name / ID": "实例名称 / ID",
+  "No container instances found": "未发现容器实例",
+  "Please enter the instance name to search": "请输入实例名称搜索",
+  "Container Desc": "容器实例常用来做算法开发和模型微调，在少量训练数据的前提下可以选择单卡、或者整机 8 卡的实例申请使用，多个实例之间内容互通，提供本地数据盘，和共享存储与数据服务，删除容器实例一并删除数据盘，长期使用的数据请保存在存储与数据服务，使用完成后下载成果，释放容器实例，系统将根据使用时长进行扣费，余额不足时将会删除容器实例。",
+  "Computing configs": "计算配置",
+  "Disk configs": "磁盘配置",
+  "System disk": "系统盘",
+  "Data disk": "数据盘",
+  "Base info": "基础信息",
+  "Billing mode": "计费模式",
+  "Pay for used": "按需计费",
+  "No charge": "不计费",
+  "Intranet IP": "内网 IP",
+  "Quick access": "快捷访问"
 }

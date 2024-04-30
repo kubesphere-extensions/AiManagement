@@ -57,7 +57,14 @@ function FaultRecord() {
       title: t('Fault Severity'),
       canHide: true,
       field: 'fault_priority',
-      render: v => v ?? '-',
+      render: (v: string) => {
+        const type = v === 'Critical' ? 'Warning' : v === 'Warning' ? 'ready' : 'error';
+        return (
+          <div>
+            <StatusIndicator type={type}>{t(v)}</StatusIndicator>
+          </div>
+        );
+      },
     },
     {
       title: t('Fault Time'),

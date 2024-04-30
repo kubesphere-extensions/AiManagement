@@ -8,6 +8,7 @@ import FaultLog from '../pages/FaultLog';
 import Training from '../pages/Traing';
 import Xid from '../pages/Xid';
 import PerformanceMonitor from '../pages/PerformanceMonitor';
+import Container from '../pages/Container';
 
 import nodeDetailRoutes from '../pages/NodeManage/Detail/router';
 import ComputingPools from '../pages/ComputingPools';
@@ -51,6 +52,10 @@ export default [
       {
         path: ':cluster/xid',
         element: <Xid />,
+      },
+      {
+        path: ':cluster/notebooks',
+        element: <Container />,
       },
     ],
   },

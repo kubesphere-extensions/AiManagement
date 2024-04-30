@@ -33,11 +33,14 @@ export const navs = [
     title: '集群管理',
     children: [
       { name: 'nodes', title: 'Node Manage', icon: 'nodes' },
-      { name: 'pools', title: 'Computing pools manage', icon: 'resource' }],
+      { name: 'pools', title: 'Computing pools manage', icon: 'resource' },],
   },
   {
     name: 'Container Management',
     title: '容器管理',
-    children: [{ name: 'training', title: 'Distributed training', icon: 'topology' }]
-  }
+    children: [
+      { name: 'notebooks', title: 'Container Example', icon: 'container' },
+      { name: 'training', title: 'Distributed training', icon: 'topology' },
+    ],
+  },
 ];
