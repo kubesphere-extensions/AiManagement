@@ -1,3 +1,16 @@
+const getIbNav = () => {
+  if (globals?.config?.enable_infiniband_grafana) {
+    return [
+      {
+        name: 'ib-networkwork-monitor',
+        title: 'IB 网络监控',
+        icon: 'monitor',
+      },
+    ];
+  }
+  return [];
+};
+
 export const navs = [
   {
     name: 'overview',
@@ -10,6 +23,7 @@ export const navs = [
         title: '性能监控',
         icon: 'monitor',
       },
+      ...getIbNav(),
     ],
   },
   {
@@ -33,14 +47,20 @@ export const navs = [
     title: '集群管理',
     children: [
       { name: 'nodes', title: 'Node Manage', icon: 'nodes' },
-      { name: 'pools', title: 'Computing pools manage', icon: 'resource' },],
+      { name: 'pools', title: 'Computing pools manage', icon: 'resource', disabled: true },
+    ],
   },
   {
-    name: 'Container Management',
-    title: '容器管理',
+    name: 'Development and training',
+    title: '开发与训练',
     children: [
-      { name: 'notebooks', title: 'Container Example', icon: 'container' },
+      { name: 'notebooks', title: 'Container Instance', icon: 'container' },
       { name: 'training', title: 'Distributed training', icon: 'topology' },
     ],
   },
+  // {
+  //   name: 'Resource Management',
+  //   title: '资源管理',
+  //   children: [{ name: 'resources', title: 'Dedicated Resource Group', icon: 'resource' }],
+  // },
 ];

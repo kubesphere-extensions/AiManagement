@@ -35,3 +35,13 @@ export const formatDuration = (duration: number): string => {
 export function capitalizeFirstLetter(str: string) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
+
+export const getStrategy = (value: string) => {
+  if (value === '2') {
+    return '禁止调度、排干、标签污点，重启故障节点';
+  }
+  if (value === '1') {
+    return '禁止调度、排干、标签污点';
+  }
+  return '不做处理';
+};

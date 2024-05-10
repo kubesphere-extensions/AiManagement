@@ -7,7 +7,7 @@ import RunningStatus from './RunningStatus';
 import Events from './Events';
 import Monitorings from './Monitoring';
 import Record from './FaultRecord';
-import Log from './MaintenanceLog'
+import Log from './MaintenanceLog';
 
 const PATH = '/ai-manage';
 const routes: RouteObject[] = [
@@ -44,9 +44,9 @@ const routes: RouteObject[] = [
         element: <Record />,
       },
       {
-       path: 'log',
-       element: <Log />
-      }
+        path: 'log',
+        element: <Log />,
+      },
     ],
   },
 ];

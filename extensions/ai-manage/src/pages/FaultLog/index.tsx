@@ -9,6 +9,7 @@ import { useDisclosure } from '@kubed/hooks';
 import { FullRow, FullCol, StyledEntity, StyledField, FieldLabel } from './styles';
 import { Waring } from '../../icons';
 import TroubleshootingModal from './TroubleshootingModal';
+import { getStrategy } from '../../utils';
 
 function FaultLog() {
   const tableRef = useRef<TableRef>();
@@ -115,6 +116,12 @@ function FaultLog() {
       ),
     },
     {
+      title: t('故障策略'),
+      field: 'gpu_err_strategy',
+      canHide: true,
+      render: v => (v ? getStrategy(v) : '-'),
+    },
+    {
       title: t('Fault Resolution'),
       field: 'fault_treatment',
       canHide: true,
@@ -199,7 +206,7 @@ function FaultLog() {
       <DataTable
         ref={tableRef}
         tableName="record"
-        rowKey="dev_gpu_uuid"
+        rowKey="records_id"
         placeholder={t('Fault placeholder')}
         url="/kapis/aicp.kubesphere.io/v1/gpu/list_gpu_fault_record"
         parameters={{ fault_status: status }}

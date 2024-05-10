@@ -15,7 +15,7 @@ import {
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { Copy } from '@kubed/icons';
 
-import { formatDuration, capitalizeFirstLetter } from '../../utils';
+import { capitalizeFirstLetter } from '../../utils';
 import { FieldLabel, ResourceId } from './styles';
 
 const STATUS_MAP = ['ALL', 'PENDING', 'CREATING', 'RUNNING'];
@@ -186,7 +186,7 @@ const getColumns = (): Column[] => {
   ];
 };
 
-function Container() {
+function ResourceGroup() {
   const tableRef = useRef<TableRef>();
 
   const columns = getColumns();
@@ -219,7 +219,7 @@ function Container() {
       <Banner
         className="mb12"
         icon={<Icon name="container" size={48} />}
-        title={t('Container Example')}
+        title={t('Container Instance')}
         description={t('Container Desc')}
       />
       <DataTable
@@ -227,7 +227,7 @@ function Container() {
         tableName="trains"
         rowKey="uuid"
         placeholder={t('Please enter the instance name to search')}
-        url="/kapis/aicp.kubesphere.io/v1/notebooks/namespaces/ALL/notebooks"
+        url="/kapis/aicp.kubesphere.io/v1/resource/namespaces/ALL/resource_group"
         transformRequestParams={handleTransformRequestParams}
         columns={columns}
         serverDataFormat={formatServerData}
@@ -241,4 +241,4 @@ function Container() {
   );
 }
 
-export default Container;
+export default ResourceGroup;

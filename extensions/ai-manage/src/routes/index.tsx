@@ -8,12 +8,15 @@ import FaultLog from '../pages/FaultLog';
 import Training from '../pages/Traing';
 import Xid from '../pages/Xid';
 import PerformanceMonitor from '../pages/PerformanceMonitor';
-import Container from '../pages/Container';
+import IbNetworkMonitor from '../pages/IbNetworkMonitor';
+import Notebooks from '../pages/Notebooks';
+import ResourceGroup from '../pages/ResourceGroup';
 
 import nodeDetailRoutes from '../pages/NodeManage/Detail/router';
 import ComputingPools from '../pages/ComputingPools';
 
 import poolDetailRouters from '../pages/ComputingPools/Detail/router';
+import traingDetailRouters from '../pages/Traing/Detail/router';
 
 export default [
   {
@@ -32,6 +35,10 @@ export default [
       {
         path: ':cluster/performance-monitor',
         element: <PerformanceMonitor />,
+      },
+      {
+        path: ':cluster/ib-networkwork-monitor',
+        element: <IbNetworkMonitor />,
       },
       {
         path: ':cluster/nodes',
@@ -55,10 +62,15 @@ export default [
       },
       {
         path: ':cluster/notebooks',
-        element: <Container />,
+        element: <Notebooks />,
+      },
+      {
+        path: ':cluster/resources',
+        element: <ResourceGroup />,
       },
     ],
   },
   ...nodeDetailRoutes,
   ...poolDetailRouters,
+  ...traingDetailRouters,
 ];

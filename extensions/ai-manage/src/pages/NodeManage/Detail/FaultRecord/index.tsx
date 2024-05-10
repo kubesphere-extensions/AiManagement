@@ -15,6 +15,7 @@ import { Button, Dropdown, Menu, MenuItem } from '@kubed/components';
 import styled from 'styled-components';
 import { useParams } from 'react-router-dom';
 import TroubleshootingModal from '../../../FaultLog/TroubleshootingModal';
+import { getStrategy } from '../../../../utils';
 
 export const FieldLabel = styled.div`
   text-overflow: ellipsis;
@@ -109,6 +110,12 @@ function FaultRecord() {
       ),
     },
     {
+      title: t('故障策略'),
+      field: 'gpu_err_strategy',
+      canHide: true,
+      render: v => (v ? getStrategy(v) : '-'),
+    },
+    {
       title: t('Fault Resolution'),
       field: 'fault_treatment',
       canHide: true,
@@ -147,7 +154,7 @@ function FaultRecord() {
         <DataTable
           ref={tableRef}
           tableName="record"
-          rowKey="dev_gpu_uuid"
+          rowKey="records_id"
           url="/kapis/aicp.kubesphere.io/v1/gpu/list_gpu_fault_record"
           transformRequestParams={params => {
             const p = transformRequestParams(params as any);

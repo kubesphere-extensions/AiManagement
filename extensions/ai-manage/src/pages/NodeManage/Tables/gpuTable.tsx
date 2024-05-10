@@ -2,9 +2,10 @@ import React from 'react';
 import { Field } from '@kubed/components';
 import { Nodes, Exclamation } from '@kubed/icons';
 import { Link } from 'react-router-dom';
-import { Column, DataTable, StatusIndicator } from '@ks-console/shared';
+import { StatusIndicator } from '@ks-console/shared';
 import { toPercentage } from './contants';
 import { FieldLabel, Resource } from '../style';
+import { DataTable, Column } from '../../../components/DataTable';
 
 interface StatusMap {
   [key: string]: string;
@@ -27,6 +28,7 @@ function GpuTable({ renderTabs }: Props) {
       field: 'search_word',
       searchable: true,
       sortable: false,
+      rowSpan: true,
       render: (_v, row) => (
         <Field
           value={<Link to={row?.gpu_node_id}>{row?.gpu_node_id ?? '-'}</Link>}
@@ -60,7 +62,7 @@ function GpuTable({ renderTabs }: Props) {
       title: t('GPU UUID'),
       field: 'dev_gpu_uuid',
       canHide: true,
-      render: (v) => v || '-',
+      render: v => v || '-',
     },
     {
       title: t('GPU Status'),
@@ -130,8 +132,26 @@ function GpuTable({ renderTabs }: Props) {
   ];
 
   const formatServerData = (serverData: Record<string, any>) => {
+    const data = serverData?.data || [];
+    const dataGroup = new Map();
+
+    // 合并数据，处理单元格合并
+    data.forEach((item: any) => {
+      if (dataGroup.has(item.gpu_node_id)) {
+        const group = dataGroup.get(item.gpu_node_id);
+        if (group[0].rowspan) {
+          group[0].rowspan++;
+        }
+        group.push(item);
+      } else {
+        dataGroup.set(item.gpu_node_id, [{ ...item, rowspan: 1 }]);
+      }
+    });
+    const newArray = Array.from(dataGroup.values());
+    const result = [].concat(...newArray);
+
     return {
-      items: serverData?.data || [],
+      items: result || [],
       totalItems: serverData?.counts,
     };
   };

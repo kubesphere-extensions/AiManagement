@@ -1,6 +1,8 @@
-import React, { useRef } from 'react';
-import { Banner } from '@kubed/components';
+import React, { useRef, useState } from 'react';
+import { Banner, Button, Dropdown, Menu, MenuItem } from '@kubed/components';
 import { get } from 'lodash';
+import { createGlobalStyle } from 'styled-components';
+import { More, Pen } from '@kubed/icons';
 import {
   DataTable,
   TableRef,
@@ -8,9 +10,18 @@ import {
   StatusIndicator,
   transformRequestParams,
 } from '@ks-console/shared';
+import { useDisclosure } from '@kubed/hooks';
 import { Waring2 } from '../../icons';
+import { getStrategy } from '../../utils';
+import ModifyXid from './ModifyXid';
 
-const getColumns = (): Column[] => {
+const GlobalStyle = createGlobalStyle`
+  body .kubed-select-dropdown {
+    z-index: 3000 !important;
+  }
+`;
+
+const getColumns = ({ MoreActions }: any): Column[] => {
   return [
     {
       title: t('Error Code'),
@@ -24,6 +35,12 @@ const getColumns = (): Column[] => {
       field: 'gpu_xid',
       canHide: true,
       render: v => v || '-',
+    },
+    {
+      title: t('故障策略'),
+      field: 'gpu_err_strategy',
+      canHide: true,
+      render: v => (v ? getStrategy(v) : '-'),
     },
     {
       title: t('Error level'),
@@ -52,12 +69,42 @@ const getColumns = (): Column[] => {
       render: v => v || '-',
       width: 400,
     },
+    {
+      id: 'more',
+      title: ' ',
+      render: (_, row) => (
+        <Dropdown placement="bottom-end" content={<MoreActions row={row} />}>
+          <Button variant="text" radius="lg">
+            <More size={16} />
+          </Button>
+        </Dropdown>
+      ),
+    },
   ];
 };
 
 function Xid() {
   const tableRef = useRef<TableRef>();
-  const columns = getColumns();
+  const createModal = useDisclosure();
+  const [info, setInfo] = useState({});
+
+  const MoreActions = ({ row }: { row: any }) => {
+    const handle = () => {
+      if (row.fault_status === '1') return;
+      createModal.open();
+      setInfo(row);
+    };
+
+    return (
+      <Menu>
+        <MenuItem icon={<Pen />} onClick={handle}>
+          {t('编辑错误码')}
+        </MenuItem>
+      </Menu>
+    );
+  };
+
+  const columns = getColumns({ MoreActions });
 
   const formatServerData = (serverData: Record<string, any>) => {
     return {
@@ -86,6 +133,7 @@ function Xid() {
 
   return (
     <div>
+      <GlobalStyle />
       <Banner
         className="mb12"
         icon={<Waring2 />}
@@ -109,6 +157,17 @@ function Xid() {
         }}
         showFooter={false}
       />
+      {createModal.isOpen && (
+        <ModifyXid
+          info={info}
+          onCancel={() => createModal.close()}
+          visible={createModal.isOpen}
+          onSuccess={() => {
+            tableRef.current?.refetch();
+            createModal.close();
+          }}
+        />
+      )}
     </div>
   );
 }
