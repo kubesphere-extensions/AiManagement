@@ -2,9 +2,10 @@ import React, { useState, useRef } from 'react';
 import { Nodes, More, Hammer } from '@kubed/icons';
 import { Banner, Card, Field, Button, Dropdown, Menu, MenuItem } from '@kubed/components';
 import { get } from 'lodash';
-import { DataTable, formatTime, StatusIndicator, Column, TableRef } from '@ks-console/shared';
+import { formatTime, StatusIndicator, TableRef } from '@ks-console/shared';
 import { Link } from 'react-router-dom';
 import { useDisclosure } from '@kubed/hooks';
+import { DataTable, Column } from '../../components/DataTable';
 
 import { FullRow, FullCol, StyledEntity, StyledField, FieldLabel } from './styles';
 import { Waring } from '../../icons';
@@ -40,6 +41,7 @@ function FaultLog() {
       title: t('Node Name'),
       field: 'gpu_node_id',
       sortable: false,
+      // rowSpan: true,
       render: (_v, row) => (
         <Field
           value={
@@ -165,8 +167,25 @@ function FaultLog() {
 
     changeProcessed(data);
 
+    const dataGroup = new Map();
+
+    // 合并数据，处理单元格合并
+    data?.fault_records?.forEach((item: any) => {
+      if (dataGroup.has(item.gpu_node_id)) {
+        const group = dataGroup.get(item.gpu_node_id);
+        if (group[0].rowspan) {
+          group[0].rowspan++;
+        }
+        group.push(item);
+      } else {
+        dataGroup.set(item.gpu_node_id, [{ ...item, rowspan: 1 }]);
+      }
+    });
+    const newArray = Array.from(dataGroup.values());
+    const result = [].concat(...newArray);
+
     return {
-      items: data?.fault_records || [],
+      items: result || [],
       totalItems: data?.counts || 0,
       other: data,
     };

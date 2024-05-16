@@ -11,6 +11,19 @@ const getIbNav = () => {
   return [];
 };
 
+const getPerNav = () => {
+  if (globals?.config?.enable_performance_grafana) {
+    return [
+      {
+        name: 'performance-monitor',
+        title: '性能监控',
+        icon: 'monitor',
+      },
+    ];
+  }
+  return [];
+};
+
 export const navs = [
   {
     name: 'overview',
@@ -18,11 +31,7 @@ export const navs = [
     children: [
       { name: 'overview', title: 'Dashboard', icon: 'dashboard' },
       { name: 'dashboard', title: 'Monitor Dashboard', icon: 'monitor' },
-      {
-        name: 'performance-monitor',
-        title: '性能监控',
-        icon: 'monitor',
-      },
+      ...getPerNav(),
       ...getIbNav(),
     ],
   },

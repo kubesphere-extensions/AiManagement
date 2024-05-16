@@ -41,6 +41,7 @@ function GpuTable({ renderTabs }: Props) {
       title: t('STATUS'),
       field: 'gpu_node_status',
       canHide: true,
+      rowSpan: true,
       render: (value, row) => {
         const status = value === 'Ready' ? 'Running' : 'Warning';
         return (
@@ -56,7 +57,15 @@ function GpuTable({ renderTabs }: Props) {
       title: t('Belonging Compute Pool'),
       field: 'gpu_node_compute_group',
       canHide: true,
+      rowSpan: true,
       render: (v, row) => v || '共享计算池',
+    },
+    {
+      title: t('GPU 数量'),
+      field: 'gpu_num',
+      canHide: true,
+      rowSpan: true,
+      render: v => v || '-',
     },
     {
       title: t('GPU UUID'),
@@ -142,9 +151,12 @@ function GpuTable({ renderTabs }: Props) {
         if (group[0].rowspan) {
           group[0].rowspan++;
         }
+        if (group[0]?.dev_gpu_uuid) {
+          group[0].gpu_num++;
+        }
         group.push(item);
       } else {
-        dataGroup.set(item.gpu_node_id, [{ ...item, rowspan: 1 }]);
+        dataGroup.set(item.gpu_node_id, [{ ...item, rowspan: 1, gpu_num: 1 }]);
       }
     });
     const newArray = Array.from(dataGroup.values());
