@@ -54,3 +54,10 @@ export const Border = styled.div<any>`
   margin-left: 4px;
   border-left: ${(props: any) => (props.isLast ? 'none' : '2px solid #e4ebf1')};
 `;
+
+export const Empty = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 56px;
+`;

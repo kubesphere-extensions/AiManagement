@@ -1,5 +1,6 @@
 import React from 'react';
-import { Wrap, Title, Date, Desc, Item, Border, Circle } from './styles';
+import { Loading } from '@kubed/components';
+import { Wrap, Title, Date, Desc, Item, Border, Circle, Empty } from './styles';
 
 type Items = {
   title: string;
@@ -10,23 +11,36 @@ type Items = {
 
 interface Props {
   data: Items[];
+  loading?: boolean;
 }
 
-function TimeLine({ data }: Props): JSX.Element {
+function TimeLine({ data, loading }: Props): JSX.Element {
+  if (loading) {
+    return (
+      <Empty>
+        <Loading />
+      </Empty>
+    );
+  }
+
   return (
     <Wrap>
-      {data.map((item, index) => (
-        <Item>
-          <Title>
-            <Circle />
-            {item?.title}
-          </Title>
-          <Border isLast={index === data.length - 1}>
-            <Date>{item?.time}</Date>
-            <Desc>{item?.desc}</Desc>
-          </Border>
-        </Item>
-      ))}
+      {data?.length ? (
+        data.map((item, index) => (
+          <Item key={index}>
+            <Title>
+              <Circle />
+              {item?.title}
+            </Title>
+            <Border isLast={index === data.length - 1}>
+              <Date>{item?.time}</Date>
+              <Desc>{item?.desc}</Desc>
+            </Border>
+          </Item>
+        ))
+      ) : (
+        <Empty>{t('NO_DATA')}</Empty>
+      )}
     </Wrap>
   );
 }

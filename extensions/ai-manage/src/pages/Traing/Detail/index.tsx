@@ -133,7 +133,7 @@ export default function TraingDetail() {
     <DetailPagee
       tabs={[
         { title: t('基本信息'), path: 'base_info' },
-        // { title: t('容器组'), path: 'pods' },
+        { title: t('容器组'), path: 'pods' },
         // { title: t('日志'), path: 'log' },
       ]}
       cardProps={{

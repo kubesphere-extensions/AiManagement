@@ -480,7 +480,7 @@ function DataTableComponent<
                           <td
                             {...cell.getCellProps()}
                             rowSpan={
-                              cell?.column?.rowSpan && row.original.rowspan
+                              cell?.column?.rowSpan && row?.original?.rowspan
                                 ? row.original.rowspan
                                 : 1
                             }

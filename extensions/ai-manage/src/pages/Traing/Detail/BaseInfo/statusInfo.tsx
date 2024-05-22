@@ -8,7 +8,6 @@ import TimeLine from '../../../../components/TimeLine';
 function StatusInfo() {
   const [detail] = useStore('trainingDetail');
   const status = get(detail, 'train_k8s_objects.status.conditions', []);
-  console.log(status);
   const statusOptions = sortBy(status, ['lastTransitionTime']).map(item => ({
     title: t(item?.type),
     time: formatTime(item?.lastTransitionTime),
@@ -17,9 +16,9 @@ function StatusInfo() {
   }));
 
   return (
-    <div>
+    <>
       <TimeLine data={statusOptions} />
-    </div>
+    </>
   );
 }
 
