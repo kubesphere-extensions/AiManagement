@@ -70,3 +70,8 @@ export const Taints = styled.span`
     box-shadow: none;
   }
 `;
+
+export const NumDanger = styled.span`
+  font-weight: bold;
+  color: #ea4641;
+`;

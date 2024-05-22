@@ -17,7 +17,7 @@ function TableWrap() {
       { id: 'gpu', label: t('GPU Monitor') },
     ];
 
-    if (!globals?.config?.enable_infiniband_grafana) {
+    if (globals?.config?.enable_infiniband_grafana) {
       pageTabs.push({ id: 'ib', label: t('IB Network Card Monitor') });
     }
 

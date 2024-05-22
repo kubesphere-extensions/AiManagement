@@ -30,7 +30,7 @@ import {
 } from '@ks-console/shared';
 import { useStore } from '@kubed/stook';
 import { Nodes, Exclamation, Start, Stop, Trash, Terminal } from '@kubed/icons';
-import { FieldLabel, Resource, Taints } from './styles';
+import { FieldLabel, Resource, Taints, NumDanger } from './styles';
 import { TaintBatchModal } from '../TaintModal/TaintBatchModal';
 import AddNodeModal from '../AddNode';
 import {
@@ -655,38 +655,55 @@ function Node({ renderTabs, setShowTab, tab }: Props) {
       {
         title: t('Number of GPU Cards'),
         field: 'node_gpu',
+        canHide: true,
         render: (_v, row) => get(listData, [row.name, 'node_gpu'], '-'),
       },
       {
-        title: t('Compute IB Network Card Configuration'),
+        title: t('正常 GPU 卡数量'),
+        field: 'gpu_available',
+        canHide: true,
+        render: (_v, row) => {
+          const current = computedGroup?.[row?.name];
+          const normal = get(current, 'gpu_available', 0);
+          const total = get(current, 'gpu_total', 0);
+          if (normal === total) {
+            return normal;
+          }
+          return <NumDanger>{normal}</NumDanger>;
+        },
+      },
+      {
+        title: t('正常 IB 卡数量'),
+        field: 'ib_available',
+        canHide: true,
+        render: (_v, row) => {
+          const current = computedGroup?.[row?.name];
+          const normal = get(current, 'ib_available', 0);
+          const total = get(current, 'ib_total', 0);
+          if (normal === total) {
+            return normal;
+          }
+          return <NumDanger>{normal}</NumDanger>;
+        },
+      },
+      {
+        title: t('计算 IB 网卡数量 / 配置'),
         field: 'node_ib_bw_compute',
         canHide: true,
         render: (_v, row) => {
-          const value = get(listData, [row.name, 'node_ib_bw_compute']);
-          return value ? `${value}G` : '-';
+          const label = get(listData, [row.name, 'node_ib_bw_compute']);
+          const value = get(listData, [row.name, 'node_ib_count_compute'], '-');
+          return <Field label={label ? `${label}G` : '-'} value={value} />;
         },
       },
       {
-        title: t('Number of Compute IB Network Cards'),
-        field: 'node_ib_count_compute',
-        render: (_v, row) => get(listData, [row.name, 'node_ib_count_compute'], '-'),
-      },
-      {
-        title: t('Storage IB Network Card Configuration'),
+        title: t('存储 IB 网卡数量 / 配置'),
         field: 'node_ib_bw_storage',
         canHide: true,
         render: (_v, row) => {
-          const value = get(listData, [row.name, 'node_ib_bw_storage']);
-          return value ? `${value}G` : '-';
-        },
-      },
-      {
-        title: t('Number of Storage IB Network Cards'),
-        field: 'node_ib_count_storage',
-        canHide: true,
-        render: (_v, row) => {
-          const value = get(listData, [row.name, 'node_ib_count_storage']);
-          return value ? `${value}` : '-';
+          const label = get(listData, [row.name, 'node_ib_bw_storage']);
+          const value = get(listData, [row.name, 'node_ib_count_storage'], '-');
+          return <Field label={label ? `${label}G` : '-'} value={value} />;
         },
       },
     ] as Column[];

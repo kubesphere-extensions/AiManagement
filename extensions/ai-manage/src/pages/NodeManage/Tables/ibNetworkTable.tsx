@@ -41,7 +41,7 @@ function ListTable({ renderTabs }: Props) {
       field: 'gpu_node_status',
       canHide: true,
       rowSpan: true,
-      render: (value, row) => {
+      render: value => {
         const status = value === 'Ready' ? 'Running' : 'Warning';
         return (
           <div>
@@ -67,7 +67,7 @@ function ListTable({ renderTabs }: Props) {
       render: v => v || '-',
     },
     {
-      title: t('计算 IB 卡 / 计算 IB 卡吞吐量'),
+      title: t('计算 IB 卡'),
       field: 'ib_bw_compute',
       canHide: true,
       rowSpan: true,
@@ -76,7 +76,7 @@ function ListTable({ renderTabs }: Props) {
       ),
     },
     {
-      title: t('存储 IB 卡 / 存储 IB 卡吞吐量'),
+      title: t('存储 IB 卡'),
       field: 'ib_bw_storage',
       canHide: true,
       rowSpan: true,
