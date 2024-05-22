@@ -7,8 +7,8 @@ import { Tooltip, Field, notify } from '@kubed/components';
 import {
   request,
   ClusterDetail,
-  Column,
-  DataTable,
+  // Column,
+  // DataTable,
   StatusIndicator,
   cpuFormat,
   memoryFormat,
@@ -41,6 +41,7 @@ import {
   getUnschedulable,
   getReady,
 } from './contants';
+import { DataTable, Column } from '../../../components/DataTable';
 
 interface Props {
   renderTabs: () => React.ReactNode;
@@ -687,7 +688,7 @@ function Node({ renderTabs, setShowTab, tab }: Props) {
         },
       },
       {
-        title: t('计算 IB 网卡数量 / 配置'),
+        title: t('计算 IB 网卡数量'),
         field: 'node_ib_bw_compute',
         canHide: true,
         render: (_v, row) => {
@@ -697,7 +698,7 @@ function Node({ renderTabs, setShowTab, tab }: Props) {
         },
       },
       {
-        title: t('存储 IB 网卡数量 / 配置'),
+        title: t('存储 IB 网卡数量'),
         field: 'node_ib_bw_storage',
         canHide: true,
         render: (_v, row) => {

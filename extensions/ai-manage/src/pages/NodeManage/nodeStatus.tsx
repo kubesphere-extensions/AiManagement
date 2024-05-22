@@ -41,6 +41,7 @@ function NodeStatus() {
 
   const statusMap: ItemData[] = [
     { key: 'Ready', value: 96, label: t('Normal'), className: '' },
+    { key: 'NoSchedule', value: 9, label: t('Critical'), className: 'waring' },
     { key: 'NotReady', value: 5, label: t('Abnormal'), className: 'err' },
     { key: 'Unavailable', value: 2, label: t('Not ready'), className: 'off' },
   ];
@@ -88,6 +89,10 @@ function NodeStatus() {
           {t('Normal')}：{t('Green')}
         </div>
         <div>{'Ready (就绪)'}</div>
+        <div className="mt12">
+          {t('警告')}：{t('黄')}
+        </div>
+        <div>{'NoSchedule (禁止调度)'}</div>
         <div className="mt12">
           {t('Not ready')}：{t('Gray')}
         </div>
@@ -154,7 +159,7 @@ function NodeStatus() {
           </TextName>
           <Row>
             {statusMap.map((item: any, index) => (
-              <StyledCol key={index} span={4}>
+              <StyledCol key={index} span={3}>
                 <BgColor className="padding4">
                   <Field
                     value={data?.[item.key] ?? 0}
@@ -167,6 +172,7 @@ function NodeStatus() {
           <ProgressBar
             data={[
               { percentage: percentages?.Ready ?? 0, color: '#55BC8A' },
+              { percentage: percentages?.NoSchedule ?? 0, color: '#f5a623' },
               { percentage: percentages?.NotReady ?? 0, color: '#CA2621' },
               { percentage: percentages?.Unavailable ?? 0, color: '#79879C' },
             ]}

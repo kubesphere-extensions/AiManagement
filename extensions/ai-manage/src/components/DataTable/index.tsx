@@ -484,6 +484,7 @@ function DataTableComponent<
                                 ? row.original.rowspan
                                 : 1
                             }
+                            // style={{ width: cell?.column?.width }}
                             className={cx({ 'table-selector': cell.column.id === '_selector' })}
                           >
                             {cell.render('Cell')}
@@ -495,6 +496,7 @@ function DataTableComponent<
                     return (
                       <td
                         {...cell.getCellProps()}
+                        // style={{ width: cell?.column?.width }}
                         className={cx({ 'table-selector': cell.column.id === '_selector' })}
                       >
                         {cell.render('Cell')}

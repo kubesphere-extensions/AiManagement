@@ -4,12 +4,13 @@ import { get } from 'lodash';
 import { createGlobalStyle } from 'styled-components';
 import { More, Pen } from '@kubed/icons';
 import {
-  DataTable,
+  // DataTable,
   TableRef,
-  Column,
+  // Column,
   StatusIndicator,
   transformRequestParams,
 } from '@ks-console/shared';
+import { DataTable, Column } from '../../components/DataTable';
 import { useDisclosure } from '@kubed/hooks';
 import { Waring2 } from '../../icons';
 import { getStrategy } from '../../utils';
@@ -59,15 +60,15 @@ const getColumns = ({ MoreActions }: any): Column[] => {
       title: t('Error Description'),
       field: 'gpu_err_desc',
       canHide: true,
-      render: v => v || '-',
-      width: 500,
+      render: v => <div style={{ width: 300, whiteSpace: 'break-spaces' }}>{v || '-'}</div>,
+      width: 300,
     },
     {
       title: t('Recommendations and measures'),
       field: 'gpu_suggestions',
       canHide: true,
-      render: v => v || '-',
-      width: 400,
+      render: v => <div style={{ width: 300, whiteSpace: 'break-spaces' }}>{v || '-'}</div>,
+      width: 300,
     },
     {
       id: 'more',

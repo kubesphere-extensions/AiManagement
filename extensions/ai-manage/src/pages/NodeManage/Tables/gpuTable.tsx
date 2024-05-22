@@ -29,6 +29,7 @@ function GpuTable({ renderTabs }: Props) {
       searchable: true,
       sortable: false,
       rowSpan: true,
+      width: 100,
       render: (_v, row) => (
         <Field
           value={<Link to={row?.gpu_node_id}>{row?.gpu_node_id ?? '-'}</Link>}

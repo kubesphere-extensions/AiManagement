@@ -24,7 +24,7 @@ export const BgColor = styled.div`
   &.padding4 {
     padding: 4px 12px;
   }
-`
+`;
 
 export const TextName = styled.div`
   display: flex;
@@ -60,16 +60,19 @@ export const StatusColor = styled.div`
     background-color: #55BC8A;
   }
 
-  &.err::before{
+  &.err::before {
     background-color: #CA2621;
   }
-  &.info::before{
+  &.info::before {
     background-color: #329DCE;
   }
-  &.off::before{
+  &.off::before {
     background-color: #79879C;
   }
-`
+  &.waring::before {
+    background-color: #f5a623;
+  }
+`;
 export const ProgressBarContainer = styled.div`
   width: 100%;
   height: 8px;

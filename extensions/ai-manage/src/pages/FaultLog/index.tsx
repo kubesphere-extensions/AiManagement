@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { Nodes, More, Hammer } from '@kubed/icons';
 import { Banner, Card, Field, Button, Dropdown, Menu, MenuItem } from '@kubed/components';
-import { get } from 'lodash';
+import { divide, get } from 'lodash';
 import { formatTime, StatusIndicator, TableRef } from '@ks-console/shared';
 import { Link } from 'react-router-dom';
 import { useDisclosure } from '@kubed/hooks';
@@ -105,7 +105,7 @@ function FaultLog() {
       field: 'gpu_err_desc',
       canHide: true,
       width: 200,
-      render: v => v || '-',
+      render: v => <div style={{ width: 200, whiteSpace: 'break-spaces' }}>{v || '-'}</div>,
     },
     {
       title: t('Fault Status'),
