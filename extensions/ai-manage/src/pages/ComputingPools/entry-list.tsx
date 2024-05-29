@@ -17,8 +17,8 @@ const getColumns = (aiPodFilters: AiPodFilter[]): Column<Pool>[] => [
     field: 'pool_name',
     render: (pool_name, row) => (
       <Field
-        label={pool_name}
-        value={<Link to={row?.pool_id}>{row?.pool_id ?? '-'}</Link>}
+        label={row?.pool_id ?? pool_name}
+        value={<Link to={row?.pool_id}>{pool_name}</Link>}
         avatar={<Resource size={40} />}
       />
     ),
