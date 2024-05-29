@@ -34,7 +34,16 @@ const BaseForm = ({
           <FormItem
             name="pool_name"
             label={t('Name')}
-            rules={[{ required: true, message: t('Please input name.') }]}
+            rules={[
+              { required: true, message: t('Please input name.') },
+              {
+                validator: async (rule, value) => {
+                  if (value?.length > 64) {
+                    return Promise.reject(t('The length cannot exceed {len}', { len: 64 }));
+                  }
+                },
+              },
+            ]}
           >
             <Input />
           </FormItem>
@@ -49,7 +58,19 @@ const BaseForm = ({
               }))}
             />
           </FormItem>
-          <FormItem name="description" label={t('Description')}>
+          <FormItem
+            name="description"
+            label={t('Description')}
+            rules={[
+              {
+                validator: async (rule, value) => {
+                  if (value?.length > 128) {
+                    return Promise.reject(t('The length cannot exceed {len}', { len: 128 }));
+                  }
+                },
+              },
+            ]}
+          >
             <Textarea />
           </FormItem>
         </Form>

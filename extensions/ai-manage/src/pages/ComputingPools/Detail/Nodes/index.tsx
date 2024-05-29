@@ -146,8 +146,6 @@ function NodeManage() {
     },
   ];
 
-  console.log(renderItemAction);
-
   if (!pool) return null;
 
   return (
