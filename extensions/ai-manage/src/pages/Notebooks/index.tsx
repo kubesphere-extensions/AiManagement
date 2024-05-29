@@ -1,7 +1,16 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Field, Banner, notify } from '@kubed/components';
+import {
+  Field,
+  Banner,
+  notify,
+  Tooltip,
+  Button,
+  Dropdown,
+  Menu,
+  MenuItem,
+} from '@kubed/components';
 import { get } from 'lodash';
 import {
   DataTable,
@@ -11,16 +20,21 @@ import {
   StatusIndicator,
   transformRequestParams,
   Icon,
+  DeleteConfirmModal,
 } from '@ks-console/shared';
+import { useMutation } from 'react-query';
+import { request } from '@ks-console/shared';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
-import { Copy } from '@kubed/icons';
+import { Copy, More, Trash } from '@kubed/icons';
+import { useDisclosure } from '@kubed/hooks';
 
 import { capitalizeFirstLetter } from '../../utils';
 import { FieldLabel, ResourceId } from './styles';
+import NoteBookDetail from './NoteBookDetail';
 
 const STATUS_MAP = ['ALL', 'PENDING', 'CREATING', 'RUNNING'];
 
-const getColumns = (): Column[] => {
+const getColumns = ({ MoreActions }: any): Column[] => {
   const getStatusSelectOption = () => {
     return STATUS_MAP.map(key => ({
       label: t(key),
@@ -81,7 +95,7 @@ const getColumns = (): Column[] => {
             label={
               <FieldLabel>
                 {`
-              ${custom_gpu_type} ${custom_gpu_memory || '--'}${custom_gpu_memory ? 'G' : ''} * ${
+              ${custom_gpu_type} ${custom_gpu_memory || '--'}${custom_gpu_memory ? 'G *' : ''} ${
                   custom_gpu || '--'
                 }${custom_gpu ? t('Core') : ''}`}
               </FieldLabel>
@@ -151,7 +165,7 @@ const getColumns = (): Column[] => {
     //   canHide: true,
     //   render: (_, record) => {
     //     const disabled = record.status !== 'Running';
-  
+
     //     return (
     //       <div css={{ display: 'flex', alignItems: 'center',gap: 16, whiteSpace: 'nowrap' }}>
     //         {
@@ -175,7 +189,7 @@ const getColumns = (): Column[] => {
     //         />
     //       </div>
     //     );
-  
+
     // },
     {
       title: t('Submitter information'),
@@ -183,20 +197,74 @@ const getColumns = (): Column[] => {
       canHide: true,
       render: v => v || '-',
     },
+    {
+      title: t('操作'),
+      field: 'detail',
+      canHide: true,
+      render: (v, row) => {
+        const content = NoteBookDetail({ notebook: row });
+        return (
+          <Tooltip content={content} maxWidth={1000}>
+            <a style={{ color: '#55bc8a' }}>实例详情</a>
+          </Tooltip>
+        );
+      },
+    },
+    {
+      id: 'more',
+      title: ' ',
+      render: (_, row) => (
+        <Dropdown placement="bottom-end" content={<MoreActions row={row} />}>
+          <Button variant="text" radius="lg">
+            <More size={16} />
+          </Button>
+        </Dropdown>
+      ),
+    },
   ];
 };
 
 function Container() {
   const tableRef = useRef<TableRef>();
+  const createModal = useDisclosure();
+  const [current, setCurrent] = useState<any>({});
 
-  const columns = getColumns();
+  const MoreActions = ({ row }: { row: any }) => {
+    const handle = () => {
+      if (row.fault_status === '1') return;
+      createModal.open();
+      setCurrent(row);
+    };
 
+    return (
+      <Menu>
+        <MenuItem icon={<Trash />} onClick={handle} disabled={row.fault_status === '1'}>
+          {t('释放实例')}
+        </MenuItem>
+      </Menu>
+    );
+  };
+  const columns = getColumns({ MoreActions });
   const formatServerData = (serverData: Record<string, any>) => {
     return {
       items: get(serverData, 'data', []),
       totalItems: get(serverData, 'counts', 0),
     };
   };
+
+  const { mutate, isLoading: isDeleting } = useMutation(
+    () => {
+      const url = '/kapis/aicp.kubesphere.io/v1/notebooks/namespaces/';
+      const paramUrl = `${url}${current.namespace}/notebooks?uuid=${current.uuid}`;
+      return request.delete(paramUrl);
+    },
+    {
+      onSuccess: () => {
+        createModal.close();
+        tableRef.current?.refetch();
+      },
+    },
+  );
 
   const handleTransformRequestParams = (params: any) => {
     const sortBy = get(params.sortBy, [0], {});
@@ -236,6 +304,15 @@ function Container() {
           image: <Icon name="container" size={48} />,
           title: t('No container instances found'),
         }}
+      />
+      <DeleteConfirmModal
+        visible={Boolean(createModal.isOpen)}
+        tip="释放容器实例，将会回收 GPU 卡、系统盘和数据盘，数据将被删除。如需保留数据，请将数据转移到共享文件存储中，不支持恢复等操作，请谨慎操作。"
+        // resource={selectedExtensionName}
+        title={`确定要释放容器实例 "${current?.name} ${current?.uuid}" 吗?`}
+        confirmLoading={isDeleting}
+        onOk={() => mutate()}
+        onCancel={createModal.close}
       />
     </div>
   );

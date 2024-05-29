@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { Nodes, More, Hammer } from '@kubed/icons';
 import { Banner, Card, Field, Button, Dropdown, Menu, MenuItem } from '@kubed/components';
-import { divide, get } from 'lodash';
+import { get } from 'lodash';
 import { formatTime, StatusIndicator, TableRef } from '@ks-console/shared';
 import { Link } from 'react-router-dom';
 import { useDisclosure } from '@kubed/hooks';

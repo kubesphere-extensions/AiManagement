@@ -233,7 +233,7 @@ function DataTableComponent<
       totalItems =
         get(serverData, 'metadata.remainingItemCount', 0) +
         pageIndex * pageSize +
-        serverData.items.length;
+        (serverData as any).items.length;
     }
     return { ...serverData, totalItems, items: serverData?.items ?? [] };
   }, [serverData, serverDataFormat]);
