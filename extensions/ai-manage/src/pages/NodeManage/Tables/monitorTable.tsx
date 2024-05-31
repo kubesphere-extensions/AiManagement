@@ -723,6 +723,8 @@ function Node({ renderTabs, setShowTab, tab }: Props) {
       field: 'name',
       searchable: true,
       sortable: true,
+      fixed: 'left',
+      width: 200,
       render: (value, row) => (
         <Field
           value={<Link to={value}>{getDisplayName(row)}</Link>}
@@ -735,6 +737,8 @@ function Node({ renderTabs, setShowTab, tab }: Props) {
       title: t('STATUS'),
       field: 'status',
       canHide: true,
+      fixed: 'left',
+      width: 150,
       render: (value, row) => {
         const status = getNodeStatus(row);
         const taints = row.taints;
@@ -753,18 +757,20 @@ function Node({ renderTabs, setShowTab, tab }: Props) {
       },
     },
     {
+      title: t('Belonging Compute Pool'),
+      field: 'gpu_node_compute_group',
+      canHide: true,
+      fixed: 'left',
+      width: 120,
+      render: (_v, row) => {
+        return computedGroup?.[row?.name]?.gpu_node_compute_group || '共享计算池';
+      },
+    },
+    {
       title: t('ROLE'),
       field: 'role',
       canHide: true,
       render: roles => (roles.indexOf('master') === -1 ? t('WORKER') : t('CONTROL_PLANE')),
-    },
-    {
-      title: t('Belonging Compute Pool'),
-      field: 'gpu_node_compute_group',
-      canHide: true,
-      render: (_v, row) => {
-        return computedGroup?.[row?.name]?.gpu_node_compute_group || '共享计算池';
-      },
     },
     ...renderColumns(),
     {

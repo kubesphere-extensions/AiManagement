@@ -13,15 +13,16 @@ import {
 } from '@kubed/components';
 import { get } from 'lodash';
 import {
-  DataTable,
+  // DataTable,
   TableRef,
-  Column,
+  // Column,
   formatTime,
   StatusIndicator,
   transformRequestParams,
   Icon,
   DeleteConfirmModal,
 } from '@ks-console/shared';
+import { DataTable, Column } from '../../components/DataTable';
 import { useMutation } from 'react-query';
 import { request } from '@ks-console/shared';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
@@ -52,6 +53,8 @@ const getColumns = ({ MoreActions }: any): Column[] => {
       field: 'name',
       searchable: true,
       canHide: true,
+      fixed: 'left',
+      width: 200,
       render: (_v, row) => (
         <Field
           value={<FieldLabel>{row.name || '-'} </FieldLabel>}

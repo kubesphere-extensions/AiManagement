@@ -1,3 +1,4 @@
+import { ExtraContainer } from './../../../components/PodsCard/styles';
 import styled from 'styled-components';
 import { Row, Entity, Field, Col, Navs } from '@kubed/components';
 
@@ -74,4 +75,66 @@ export const Taints = styled.span`
 export const NumDanger = styled.span`
   font-weight: bold;
   color: #ea4641;
+`;
+
+export const CollapseWrap = styled.div`
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  .num {
+    margin-right: 5px;
+  }
+`;
+
+export const BaseTable = styled.div`
+  padding: 10px;
+  & > table {
+    width: 100%;
+    text-align: left;
+    white-space: nowrap;
+    display: table;
+    border-collapse: collapse;
+    border-spacing: 0;
+    thead {
+      display: table-header-group;
+      background-color: #fff;
+      th {
+        box-shadow: inset 0 -1px 0 0 #eff4f9;
+        padding: 16px 12px;
+        font-size: 12px;
+        font-weight: 600;
+        border-top: 1px solid #eff4f9;
+        border-left: 1px solid #eff4f9;
+        &:last-child {
+          border-right: 1px solid #eff4f9;
+        }
+      }
+    }
+    tbody {
+      display: table-row-group;
+      tr {
+        color: inherit;
+        display: table-row;
+        vertical-align: middle;
+        border-collapse: collapse;
+        border-spacing: 0;
+        outline: 0;
+        &:hover td {
+          background-color: #eff4f9;
+        }
+        td {
+          display: table-cell;
+          vertical-align: inherit;
+          border-left: 1px solid #eff4f9;
+          color: #242e42;
+          padding: 8px 12px;
+          text-align: left;
+          box-shadow: inset 0 -1px 0 0 #eff4f9;
+          &:last-child {
+            border-right: 1px solid #eff4f9;
+          }
+        }
+      }
+    }
+  }
 `;

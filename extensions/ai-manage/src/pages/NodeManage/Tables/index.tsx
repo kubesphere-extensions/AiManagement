@@ -4,6 +4,7 @@ import { useStore } from '@kubed/stook';
 import MonitorTable from './monitorTable';
 import GpuTable from './gpuTable';
 import IbNetworkTable from './ibNetworkTable';
+import VGPUTable from './vGPUTable';
 import { TableContent, StyledNav, HiddendNav } from './styles';
 
 function TableWrap() {
@@ -15,6 +16,7 @@ function TableWrap() {
       { id: 'monitor', label: t('Node Monitor') },
       { id: 'list', label: t('Node List') },
       { id: 'gpu', label: t('GPU Monitor') },
+      { id: 'vGPU', label: t('vGPU Monitor') },
     ];
 
     if (globals?.config?.enable_infiniband_grafana) {
@@ -37,9 +39,10 @@ function TableWrap() {
     <TableContent>
       {showTab && <StyledNav data={navs} value={tab} onChange={v => setTab(v)} />}
       {tab === 'gpu' && <GpuTable renderTabs={defaultTabs} />}
-      {tab !== 'gpu' && tab !== 'ib' && (
+      {(tab === 'monitor' || tab === 'list') && (
         <MonitorTable renderTabs={defaultTabs} setShowTab={setShowTab} tab={tab} />
       )}
+      {tab === 'vGPU' && <VGPUTable renderTabs={defaultTabs} />}
       {tab === 'ib' && <IbNetworkTable renderTabs={defaultTabs} />}
     </TableContent>
   );

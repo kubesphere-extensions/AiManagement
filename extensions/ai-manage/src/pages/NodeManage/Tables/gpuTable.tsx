@@ -29,7 +29,8 @@ function GpuTable({ renderTabs }: Props) {
       searchable: true,
       sortable: false,
       rowSpan: true,
-      width: 100,
+      width: 200,
+      fixed: 'left',
       render: (_v, row) => (
         <Field
           value={<Link to={row?.gpu_node_id}>{row?.gpu_node_id ?? '-'}</Link>}
@@ -43,6 +44,8 @@ function GpuTable({ renderTabs }: Props) {
       field: 'gpu_node_status',
       canHide: true,
       rowSpan: true,
+      width: 100,
+      fixed: 'left',
       render: (value, row) => {
         const status = value === 'Ready' ? 'Running' : 'Warning';
         return (
@@ -59,6 +62,8 @@ function GpuTable({ renderTabs }: Props) {
       field: 'gpu_node_compute_group',
       canHide: true,
       rowSpan: true,
+      width: 120,
+      fixed: 'left',
       render: (v, row) => v || '共享计算池',
     },
     {
@@ -66,13 +71,17 @@ function GpuTable({ renderTabs }: Props) {
       field: 'gpu_num',
       canHide: true,
       rowSpan: true,
+      width: 80,
+      fixed: 'left',
       render: v => v || '-',
     },
     {
-      title: t('GPU UUID'),
-      field: 'dev_gpu_uuid',
+      title: t('GPU UUID / 型号'),
+      field: 'dev_gpu_name',
       canHide: true,
-      render: v => v || '-',
+      render: (v, row) => (
+        <Field value={<Resource>{row?.dev_gpu_uuid || '-'}</Resource>} label={v || '-'} />
+      ),
     },
     {
       title: t('GPU Status'),

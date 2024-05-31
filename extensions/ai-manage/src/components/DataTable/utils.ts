@@ -169,3 +169,28 @@ export function updateOriginalItem<TOriginalItem extends Record<string, any>>(
 
   return listDataShadow;
 }
+
+export const getFixedOffset = (
+  width: number[],
+): { leftOffsets: number[]; rightOffsets: number[] } => {
+  const leftOffsets: number[] = [];
+  const rightOffsets: number[] = [];
+  let left = 0;
+  let right = 0;
+
+  for (let index = 0; index < width.length; index += 1) {
+    // Left offset
+    leftOffsets[index] = left;
+    left += width[index] || 0;
+
+    // Right offset
+    const end = width.length - index - 1;
+    rightOffsets[end] = right;
+    right += width[end] || 0;
+  }
+
+  return {
+    leftOffsets,
+    rightOffsets,
+  };
+};

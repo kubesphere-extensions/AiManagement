@@ -4,9 +4,7 @@ import { Link } from 'react-router-dom';
 import { Field, Banner, notify } from '@kubed/components';
 import { get } from 'lodash';
 import {
-  DataTable,
   TableRef,
-  Column,
   formatTime,
   StatusIndicator,
   transformRequestParams,
@@ -14,6 +12,7 @@ import {
 } from '@ks-console/shared';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { Copy } from '@kubed/icons';
+import { DataTable, Column } from '../../components/DataTable';
 
 import { capitalizeFirstLetter } from '../../utils';
 import { FieldLabel, ResourceId } from './styles';
@@ -38,6 +37,8 @@ const getColumns = (): Column[] => {
       field: 'name',
       searchable: true,
       canHide: true,
+      fixed: 'left',
+      width: 200,
       render: (_v, row) => (
         <Field
           value={<FieldLabel>{row.name || '-'} </FieldLabel>}

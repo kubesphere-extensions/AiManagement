@@ -6,8 +6,21 @@ export const TableWrapper = styled(Card)`
 `;
 
 export const TableMain = styled.div`
-  padding: 0 12px 12px;
+  // padding: 0 12px 12px;
   overflow-x: auto;
+  &.left-scrolling {
+    .table-header-cell-fixed-left-last:after,
+    .table-data-cell-fixed-left-last:after {
+      box-shadow: inset 10px 0 8px -8px rgb(119 133 146 / 30%);
+    }
+  }
+
+  &.right-scrolling {
+    .table-header-cell-fixed-right-last:after,
+    .table-data-cell-fixed-right-last:after {
+      box-shadow: inset -10px 0 8px -8px rgb(119 133 146 / 30%);
+    }
+  }
   table {
     width: 100%;
     text-align: left;
@@ -32,6 +45,31 @@ export const Table = styled.table`
     letter-spacing: normal;
     color: #79879c;
     cursor: pointer;
+    &.table-header-cell-fixed-left-last:after,
+    &.table-data-cell-fixed-left-last:after {
+      position: absolute;
+      top: 0;
+      right: -1px;
+      bottom: -1px;
+      width: 20px;
+      transform: translateX(100%);
+      transition: box-shadow 0.3s;
+      content: '';
+      pointer-events: none;
+    }
+
+    &.table-header-cell-fixed-right-last:after,
+    &.table-data-cell-fixed-right-last:after {
+      position: absolute;
+      top: 0;
+      bottom: -1px;
+      left: -1px;
+      width: 20px;
+      transform: translateX(-100%);
+      transition: box-shadow 0.3s;
+      content: '';
+      pointer-events: none;
+    }
   }
 
   .table-selector {
@@ -40,7 +78,7 @@ export const Table = styled.table`
 `;
 
 export const TBody = styled.tbody`
-  tr {
+  tr.normal-tr {
     &:hover {
       td {
         background-color: #eff4f9;
@@ -87,7 +125,7 @@ export const TBody = styled.tbody`
     }
   }
 
-  td {
+  tr.normal-tr > td {
     height: 56px;
     padding: 8px 12px;
     border-top: 1px solid #eff4f9;
@@ -102,6 +140,7 @@ export const TBody = styled.tbody`
     word-break: break-all;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
+    background-color: #fff;
 
     &:first-child {
       border-left: 1px solid transparent;
@@ -110,5 +149,33 @@ export const TBody = styled.tbody`
     &:last-child {
       border-right: 1px solid transparent;
     }
+    &.table-header-cell-fixed-left-last:after,
+    &.table-data-cell-fixed-left-last:after {
+      position: absolute;
+      top: 0;
+      right: -1px;
+      bottom: -1px;
+      width: 20px;
+      transform: translateX(100%);
+      transition: box-shadow 0.3s;
+      content: '';
+      pointer-events: none;
+      border-right: none;
+    }
+
+    &.table-header-cell-fixed-right-last:after,
+    &.table-data-cell-fixed-right-last:after {
+      position: absolute;
+      top: 0;
+      bottom: -1px;
+      left: -1px;
+      width: 20px;
+      transform: translateX(-100%);
+      transition: box-shadow 0.3s;
+      content: '';
+      pointer-events: none;
+      border-left: none;
+    }
+  }
   }
 `;

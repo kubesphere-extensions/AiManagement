@@ -44,5 +44,6 @@
   "Not ready": "未就绪",
   "Availability of NVLINK": "是否有NVLINK",
   "GPU allocated":"已分配 GPU",
-  "IB Network Card Monitor":"IB 网卡监控"
+  "IB Network Card Monitor":"IB 网卡监控",
+  "vGPU Monitor": "vGPU 监控"
 }

@@ -42,11 +42,27 @@ const DropdownWrapper = styled.span`
 export interface TableHeadProps<T extends Record<string, unknown>> {
   column: HeaderGroup<T>;
   selectType: 'checkbox' | 'radio' | boolean;
+  width?: number | string;
+  fixedDirection: string | null;
+  fixed: boolean;
+  rightOffsets: any;
+  leftOffsets: any;
+  index: number;
+  lastFixedLeftPos: any;
+  lastFixedRightPos: any;
 }
 
 function TableHead<T extends Record<string, unknown>>({
   column,
   selectType,
+  width,
+  fixedDirection,
+  fixed,
+  leftOffsets,
+  rightOffsets,
+  index,
+  lastFixedLeftPos,
+  lastFixedRightPos,
 }: PropsWithChildren<TableHeadProps<T>>) {
   const { description, sortable, filterOptions = [], toggleSortBy, setFilter } = column;
 
@@ -120,7 +136,31 @@ function TableHead<T extends Record<string, unknown>>({
   return (
     <th
       {...column.getHeaderProps()}
-      className={cx({ 'table-selector': column.id === '_selector' })}
+      className={cx({
+        'table-selector': column.id === '_selector',
+        ['table-header-cell-fixed']: fixed,
+        [`table-header-cell-fixed-${fixedDirection}`]: fixedDirection,
+        ['table-header-cell-fixed-left-last']: fixed && index === lastFixedLeftPos,
+        ['table-header-cell-fixed-right-last']: fixed && index === lastFixedRightPos,
+      })}
+      style={{
+        ...(fixed
+          ? {
+              position: 'sticky',
+              top: 0,
+              zIndex: 10,
+              background: '#fff',
+              _hover: {
+                zIndex: 11,
+              },
+
+              ...(fixedDirection === 'left'
+                ? { left: `${leftOffsets[index]}px`, borderLeft: 'none' }
+                : { right: `${rightOffsets[index]}px`, borderRight: 'none' }),
+            }
+          : {}),
+        ...(width ? { width, minWidth: width } : {}),
+      }}
     >
       <TWrapper>
         {renderDropdown()}

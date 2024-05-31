@@ -41,7 +41,8 @@ function FaultLog() {
       title: t('Node Name'),
       field: 'gpu_node_id',
       sortable: false,
-      // rowSpan: true,
+      width: 200,
+      fixed: 'left',
       render: (_v, row) => (
         <Field
           value={

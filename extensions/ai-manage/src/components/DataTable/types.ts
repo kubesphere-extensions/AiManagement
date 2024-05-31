@@ -18,6 +18,7 @@ interface BaseColumn {
   minWidth?: number;
   maxWidth?: number;
   rowSpan?: boolean;
+  fixed?: 'left' | 'right';
 }
 
 type ValueOf<
@@ -108,7 +109,7 @@ export interface TableProps<
   enableQueryString?: boolean;
   watchOptions?: Pick<
     UseWebSocketOptions<Record<string, any>, T>,
-  'enabled' | 'url' | 'module' | 'isFederated' | 'format' | 'onAddedOrDeleted'
+    'enabled' | 'url' | 'module' | 'isFederated' | 'format' | 'onAddedOrDeleted'
   >;
   emptyOptions?: TableEmptyOptions;
   onChangeData?: (data: T[]) => void;
@@ -116,6 +117,8 @@ export interface TableProps<
   filteredEmptyOptions?: TableFilteredEmptyOptions;
   skeleton?: TableSkeletonProps;
   hideSettingMenu?: boolean;
+  expandedRowRender?: (record: T, index: number) => ReactNode;
+  expandedRowKeys?: string[];
 }
 
 export interface TableRef<T extends Record<string, any> = Record<string, any>> {

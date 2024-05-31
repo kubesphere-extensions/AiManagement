@@ -28,8 +28,9 @@ import cx from 'classnames';
 import { get, merge, debounce, isEmpty, pick, has } from 'lodash';
 import { Checkbox, LoadingOverlay } from '@kubed/components';
 import { useLocalStorage, useDebouncedValue } from '@kubed/hooks';
+import { findLastIndex } from 'lodash';
 
-import { updateOriginalItem } from './utils';
+import { updateOriginalItem, getFixedOffset } from './utils';
 import { useWebSocket } from '@ks-console/shared';
 import { TableSkeleton } from '../Skeletons';
 
@@ -161,10 +162,19 @@ function DataTableComponent<
     isLoading: isLoadingProp = false,
     skeleton,
     hideSettingMenu = false,
+    expandedRowRender,
+    expandedRowKeys,
   } = props;
 
   const [, setStorageState] = useLocalStorage({ key: `tableState:${tableName}` });
   const initialState = getInitialState(tableName, initialStateProp);
+
+  const [leftScrolling, setLeftScrolling] = useState<boolean>(false);
+  const [rightScrolling, setRightScrolling] = useState<boolean>(false);
+
+  const utilColWidth = 44;
+  const shouldRenderUtilColumn = !!selectType;
+  const shouldRenderExpanded = expandedRowRender !== undefined;
 
   const [{ pageIndex, pageSize, totalCount, filters, sortBy }, dispatch] = useReducer(
     reducer,
@@ -197,6 +207,77 @@ function DataTableComponent<
   const getRowId = (row: any, relativeIndex: number) => {
     return get(row, rowKey) || String(relativeIndex);
   };
+
+  const getIsExpanded = React.useCallback(
+    (key: string) => expandedRowKeys?.includes(key),
+    [expandedRowKeys],
+  );
+
+  const isFixed = useMemo<boolean>(
+    () => columns.map(col => col.fixed).filter(Boolean).length !== 0,
+    [columns],
+  );
+
+  const lastFixedLeftPos = useMemo<number>(() => {
+    const index = findLastIndex(columns, col => col?.fixed === 'left');
+    return shouldRenderUtilColumn ? index + 1 : index;
+  }, [columns, shouldRenderUtilColumn]);
+
+  const lastFixedRightPos = useMemo<number>(() => {
+    const index = columns.findIndex(col => col?.fixed === 'right');
+    return index;
+  }, [columns, shouldRenderUtilColumn]);
+
+  const getIsFixed = React.useCallback(
+    (index: number) =>
+      isFixed &&
+      ((lastFixedLeftPos !== -1 && index <= lastFixedLeftPos) ||
+        (lastFixedRightPos !== -1 && index >= lastFixedRightPos)),
+    [isFixed, lastFixedLeftPos, lastFixedRightPos],
+  );
+
+  const { leftOffsets, rightOffsets } = useMemo(() => {
+    const width = columns.map(col => col?.width ?? 0) as number[];
+
+    return getFixedOffset(shouldRenderUtilColumn ? [utilColWidth, ...width] : width);
+  }, [columns, shouldRenderUtilColumn]);
+
+  const computedStyle = React.useCallback(
+    (column: any, index: number) => {
+      let width = column?.width;
+      width = shouldRenderUtilColumn && index === 0 ? utilColWidth : width;
+      const fixed = getIsFixed(index);
+      let fixedDirection: string | null = null;
+      const widthStyle = { ...(width ? { width, minWidth: width } : {}) } as const;
+
+      if (fixed) {
+        if (index <= lastFixedLeftPos) {
+          fixedDirection = 'left';
+        } else if (index >= lastFixedRightPos) {
+          fixedDirection = 'right';
+        }
+      }
+      return {
+        fixed,
+        fixedDirection,
+        style: fixed
+          ? {
+              position: 'sticky',
+              top: 0,
+              zIndex: 10,
+              _hover: {
+                zIndex: 11,
+              },
+              ...widthStyle,
+              ...(fixedDirection === 'left'
+                ? { left: `${leftOffsets[index]}px`, borderLeft: 'none' }
+                : { right: rightOffsets[index], borderRight: 'none' }),
+            }
+          : widthStyle,
+      };
+    },
+    [getIsFixed, shouldRenderUtilColumn],
+  );
 
   const [enabledLoading, setEnabledLoading] = useState(true);
 
@@ -321,6 +402,7 @@ function DataTableComponent<
     onSelect?.(state.selectedRowIds ?? {}, selectedFlatRows?.map(d => d.original) ?? []);
   }, [state.selectedRowIds]);
 
+  const wrapperRef = useRef<HTMLDivElement | null>(null);
   const tableRef = useRef<TableRef<T>>();
 
   useImperativeHandle(ref, () => ({
@@ -356,6 +438,29 @@ function DataTableComponent<
       withoutTable,
     };
   };
+
+  useEffect(() => {
+    if (isFixed) {
+      const resizeHandler = () => {
+        if (wrapperRef?.current !== null) {
+          const { scrollLeft, scrollWidth, clientWidth } = wrapperRef.current;
+
+          setLeftScrolling(scrollLeft > 0);
+          setRightScrolling(scrollLeft < scrollWidth - clientWidth);
+        }
+      };
+
+      window.addEventListener('resize', resizeHandler);
+      wrapperRef?.current?.addEventListener('scroll', resizeHandler);
+
+      return () => {
+        window.removeEventListener('resize', resizeHandler);
+        wrapperRef?.current?.removeEventListener('scroll', resizeHandler);
+      };
+    }
+
+    return () => {};
+  }, [isFixed, columns, wrapperRef?.current]);
 
   const getFilteredEmptyOptions = () => {
     const { withoutTable: DEFAULT_WITHOUT_TABLE } = DEFAULT_FILTERED_EMPTY_OPTIONS;
@@ -436,79 +541,139 @@ function DataTableComponent<
           hideSettingMenu={hideSettingMenu}
         />
       )}
-      <TableMain>
-        <Table {...getTableProps()}>
-          {headerGroups.map(headerGroup => {
-            return (
-              <colgroup key={`colgroup-${headerGroup.getHeaderGroupProps().key}`}>
-                {headerGroup.headers.map(column => {
-                  const { key: headerKey } = column.getHeaderProps();
-                  if (column.width) return <col width={column.width} key={`col-${headerKey}`} />;
-                  return <col key={`col-${headerKey}`} />;
-                })}
-              </colgroup>
-            );
+      <div style={{ padding: '2px 12px 0' }}>
+        <TableMain
+          className={cx({
+            ['left-scrolling']: leftScrolling,
+            ['right-scrolling']: rightScrolling,
           })}
-          {!hideTableHead && (
-            <thead>
-              {headerGroups.map(headerGroup => {
-                return (
-                  <tr {...headerGroup.getHeaderGroupProps()}>
-                    {headerGroup.headers.map(column => {
-                      const { key: headerKey } = column.getHeaderProps();
-                      return <TableHead column={column} key={headerKey} selectType={selectType} />;
-                    })}
-                  </tr>
-                );
-              })}
-            </thead>
-          )}
-          <TBody {...getTableBodyProps()}>
-            {rows.map(row => {
-              prepareRow(row);
-              if (disableRowSelect) {
-                row.canSelect = !disableRowSelect(row.original);
-              } else {
-                row.canSelect = true;
-              }
+          ref={wrapperRef}
+        >
+          <Table {...getTableProps()}>
+            {/* {headerGroups.map(headerGroup => {
               return (
-                <tr {...row.getRowProps()} className={cx({ 'row-selected': row.isSelected })}>
-                  {row.cells.map((cell: any) => {
-                    if (cell?.column?.rowSpan) {
-                      if (row?.original?.rowspan) {
+                <colgroup key={`colgroup-${headerGroup.getHeaderGroupProps().key}`}>
+                  {headerGroup.headers.map(column => {
+                    const { key: headerKey } = column.getHeaderProps();
+                    if (column.width) return <col width={column.width} key={`col-${headerKey}`} />;
+                    return <col key={`col-${headerKey}`} />;
+                  })}
+                </colgroup>
+              );
+            })} */}
+            {!hideTableHead && (
+              <thead>
+                {headerGroups.map(headerGroup => {
+                  return (
+                    <tr {...headerGroup.getHeaderGroupProps()}>
+                      {headerGroup.headers.map((column, index) => {
+                        const { key: headerKey } = column.getHeaderProps();
+                        const computed = computedStyle(column, index);
+                        const width = column.width;
+                        return (
+                          <TableHead
+                            column={column as any}
+                            key={headerKey}
+                            width={width}
+                            fixed={computed.fixed}
+                            index={index}
+                            fixedDirection={computed.fixedDirection}
+                            leftOffsets={leftOffsets}
+                            rightOffsets={rightOffsets}
+                            selectType={selectType}
+                            lastFixedLeftPos={lastFixedLeftPos}
+                            lastFixedRightPos={lastFixedRightPos}
+                          />
+                        );
+                      })}
+                    </tr>
+                  );
+                })}
+              </thead>
+            )}
+            <TBody {...getTableBodyProps()}>
+              {rows.map((row, num) => {
+                prepareRow(row);
+                if (disableRowSelect) {
+                  row.canSelect = !disableRowSelect(row.original);
+                } else {
+                  row.canSelect = true;
+                }
+                return (
+                  <React.Fragment key={row.id}>
+                    <tr
+                      {...row.getRowProps()}
+                      className={cx('normal-tr', { 'row-selected': row.isSelected })}
+                      style={{ background: '#fff' }}
+                    >
+                      {row.cells.map((cell: any, index: number) => {
+                        const computed = computedStyle(cell.column, index);
+                        if (cell?.column?.rowSpan) {
+                          if (row?.original?.rowspan) {
+                            return (
+                              <td
+                                {...cell.getCellProps()}
+                                rowSpan={
+                                  expandedRowRender
+                                    ? row.original.rowspan * 2
+                                    : row.original.rowspan
+                                }
+                                style={computed.style}
+                                className={cx({
+                                  'table-selector': cell.column.id === '_selector',
+                                  ['table-header-cell-fixed']: computed.fixed,
+                                  [`table-header-cell-fixed-${computed.fixedDirection}`]:
+                                    computed.fixedDirection,
+                                  ['table-header-cell-fixed-left-last']:
+                                    computed.fixed && index === lastFixedLeftPos,
+                                  ['table-header-cell-fixed-right-last']:
+                                    computed.fixed && index === lastFixedRightPos,
+                                })}
+                              >
+                                {cell.render('Cell')}
+                              </td>
+                            );
+                          }
+                          return null;
+                        }
                         return (
                           <td
                             {...cell.getCellProps()}
-                            rowSpan={
-                              cell?.column?.rowSpan && row?.original?.rowspan
-                                ? row.original.rowspan
-                                : 1
-                            }
-                            // style={{ width: cell?.column?.width }}
-                            className={cx({ 'table-selector': cell.column.id === '_selector' })}
+                            style={computed.style}
+                            className={cx({
+                              'table-selector': cell.column.id === '_selector',
+                              ['table-header-cell-fixed']: computed.fixed,
+                              [`table-header-cell-fixed-${computed.fixedDirection}`]:
+                                computed.fixedDirection,
+                              ['table-header-cell-fixed-left-last']:
+                                computed.fixed && index === lastFixedLeftPos,
+                              ['table-header-cell-fixed-right-last']:
+                                computed.fixed && index === lastFixedRightPos,
+                            })}
                           >
                             {cell.render('Cell')}
                           </td>
                         );
-                      }
-                      return null;
-                    }
-                    return (
-                      <td
-                        {...cell.getCellProps()}
-                        // style={{ width: cell?.column?.width }}
-                        className={cx({ 'table-selector': cell.column.id === '_selector' })}
+                      })}
+                    </tr>
+                    {shouldRenderExpanded && (
+                      <tr
+                        style={{
+                          display: getIsExpanded(row.original[rowKey]) ? undefined : 'none',
+                        }}
                       >
-                        {cell.render('Cell')}
-                      </td>
-                    );
-                  })}
-                </tr>
-              );
-            })}
-          </TBody>
-        </Table>
-      </TableMain>
+                        <td colSpan={shouldRenderUtilColumn ? columns.length + 1 : columns.length}>
+                          {expandedRowRender(row as any, num)}
+                        </td>
+                      </tr>
+                    )}
+                  </React.Fragment>
+                );
+              })}
+            </TBody>
+          </Table>
+        </TableMain>
+      </div>
       {totalCount === 0 && renderEmpty()}
       {renderFooter()}
       <LoadingOverlay visible={(enabledLoading && isFetching) || isLoadingProp} />

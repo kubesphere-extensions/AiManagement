@@ -4,14 +4,13 @@ import { Banner, notify } from '@kubed/components';
 import { Topology } from '@kubed/icons';
 import { get } from 'lodash';
 import {
-  DataTable,
   TableRef,
-  Column,
   formatTime,
   StatusIndicator,
   transformRequestParams,
 } from '@ks-console/shared';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
+import { DataTable, Column } from '../../components/DataTable';
 import { Field } from '@kubed/components';
 import { Copy } from '@kubed/icons';
 
@@ -49,6 +48,8 @@ const getColumns = (): Column[] => {
       field: 'name',
       searchable: true,
       canHide: true,
+      fixed: 'left',
+      width: 200,
       render: (_v, row) => (
         <Field
           value={<FieldLabel>{row.name || '-'} </FieldLabel>}
