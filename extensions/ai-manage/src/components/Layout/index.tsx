@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Outlet, useLocation, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { Computing } from '@kubed/icons';
@@ -9,9 +9,13 @@ import { NavMenu, NavTitle, useGlobalStore, request, getActions } from '@ks-cons
 import { navs as navMenus } from './contants';
 import ClusterSelect from './clusterSelect';
 
-const PageSide = styled.div`
+interface PageStyleProps {
+  top: number;
+}
+
+const PageSide = styled.div<PageStyleProps>`
   position: fixed;
-  top: 88px;
+  top: ${({ top }) => (top ? +top + 20 : 88)}px;
   padding: 0 20px 40px;
   width: 260px;
   z-index: 99;
@@ -155,6 +159,7 @@ export const fetchRules = async (params: any): Promise<any> => {
 
 function ListLayout(): JSX.Element {
   const location = useLocation();
+  const navRef = useRef<HTMLDivElement>(null);
 
   const params = useParams<'workspace' | 'cluster'>();
   const { cluster } = params;
@@ -180,7 +185,7 @@ function ListLayout(): JSX.Element {
 
   return (
     <>
-      <PageSide>
+      <PageSide top={(navRef?.current as any)?.offsetTop}>
         <NavTitle
           icon={<Computing variant="light" size={40} />}
           title={t('AI_MANAGE')}
@@ -192,7 +197,7 @@ function ListLayout(): JSX.Element {
           <NavMenu navs={navs} prefix={`/ai-manage/${cluster}`} pathname={location.pathname} />
         )}
       </PageSide>
-      <PageMain>{cluster && <Outlet />}</PageMain>
+      <PageMain ref={navRef}>{cluster && <Outlet />}</PageMain>
     </>
   );
 }

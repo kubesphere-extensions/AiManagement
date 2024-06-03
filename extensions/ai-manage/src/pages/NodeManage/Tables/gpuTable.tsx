@@ -89,7 +89,7 @@ function GpuTable({ renderTabs }: Props) {
       canHide: true,
       render: (value: string) => {
         const status = statusMap?.[value] ?? 'Unknown';
-        const type = +value === 0 ? 'Running' : 'Warning';
+        const type = +value === 0 ? 'Running' : +value === 2 ? 'Error' : 'Warning';
         return (
           <div>
             <StatusIndicator type={type}>{t(status)}</StatusIndicator>
@@ -101,8 +101,11 @@ function GpuTable({ renderTabs }: Props) {
       title: t('GPU utilization'),
       field: 'dev_gpu_util',
       canHide: true,
-      render: (v, row) =>
-        row?.dev_gpu_status === '0' ? (
+      render: (v, row) => {
+        if (+row?.dev_gpu_status === 2) {
+          return '-';
+        }
+        return (
           <Field
             value={
               <Resource>
@@ -110,16 +113,18 @@ function GpuTable({ renderTabs }: Props) {
               </Resource>
             }
           />
-        ) : (
-          '-'
-        ),
+        );
+      },
     },
     {
       title: t('GPU memory utilization'),
       field: 'dev_gpu_mem_copy_util',
       canHide: true,
-      render: (value, row) =>
-        row?.dev_gpu_status === '0' ? (
+      render: (value, row) => {
+        if (+row?.dev_gpu_status === 2) {
+          return '-';
+        }
+        return (
           <Field
             value={
               <Resource>
@@ -129,9 +134,8 @@ function GpuTable({ renderTabs }: Props) {
             }
             label={`${row.dev_gpu_mem_used}/${row.dev_gpu_mem_total} GiB`}
           />
-        ) : (
-          '-'
-        ),
+        );
+      },
     },
     {
       title: t('命名空间'),

@@ -18,8 +18,8 @@ interface Props {
 
 const statusMap: StatusMap = {
   '0': 'Normal',
-  '2': 'Abnormal',
   '1': 'Unknown',
+  '2': 'Abnormal',
 };
 
 function VGpuTable({ renderTabs }: Props) {
@@ -105,7 +105,7 @@ function VGpuTable({ renderTabs }: Props) {
       canHide: true,
       render: (value: string) => {
         const status = statusMap?.[value] ?? 'Unknown';
-        const type = +value === 0 ? 'Running' : 'Warning';
+        const type = +value === 0 ? 'Running' : +value === 2 ? 'Error' : 'Warning';
         return (
           <div>
             <StatusIndicator type={type}>{t(status)}</StatusIndicator>
@@ -118,9 +118,12 @@ function VGpuTable({ renderTabs }: Props) {
       field: 'gpu_device_shared_num',
       canHide: true,
       render: (v, row: any) => {
+        if (+row?.dev_gpu_status === 2) {
+          return '-';
+        }
         return (
           <CollapseWrap onClick={() => handleExpand(row)}>
-            <span className="num">{v || '-'}</span>
+            <span className="num">{v}</span>
             {!!row?.vgpu_core_list?.length && (
               <>
                 {expandedRowKeys?.includes(row?.dev_gpu_uuid) ? (
@@ -138,38 +141,53 @@ function VGpuTable({ renderTabs }: Props) {
       title: t('GPU 显存使用率'),
       field: 'gpu_node_memory_percentage',
       canHide: true,
-      render: v => (
-        <Field
-          value={
-            <Resource>
-              <span>{toPercentage(+v)}</span>
-            </Resource>
-          }
-        />
-      ),
+      render: (v, row) => {
+        if (+row?.dev_gpu_status === 2) {
+          return '-';
+        }
+        return (
+          <Field
+            value={
+              <Resource>
+                <span>{toPercentage(+v)}</span>
+              </Resource>
+            }
+          />
+        );
+      },
     },
     {
       title: t('可分配显存'),
       field: 'gpu_device_memory_limit',
       canHide: true,
-      render: (value, row) => (
-        <Field
-          value={
-            <Resource>{`${(value || 0) - (row?.gpu_device_memory_allocated || 0)} GB`}</Resource>
-          }
-          label={`${row?.gpu_device_memory_allocated}/${value || 0} GB`}
-        />
-      ),
+      render: (value, row) => {
+        if (+row?.dev_gpu_status === 2) {
+          return '-';
+        }
+        return (
+          <Field
+            value={
+              <Resource>{`${(value || 0) - (row?.gpu_device_memory_allocated || 0)} GB`}</Resource>
+            }
+            label={`${row?.gpu_device_memory_allocated}/${value || 0} GB`}
+          />
+        );
+      },
     },
     {
       title: t('可分配算力'),
       field: 'gpu_device_core_limit',
-      render: (value, row) => (
-        <Field
-          value={<Resource>{`${(value || 0) - (row?.gpu_device_core_allocated || 0)}`}</Resource>}
-          label={`${row?.gpu_device_core_allocated || 0}/${value || 0}`}
-        />
-      ),
+      render: (value, row) => {
+        if (+row?.dev_gpu_status === 2) {
+          return '-';
+        }
+        return (
+          <Field
+            value={<Resource>{`${(value || 0) - (row?.gpu_device_core_allocated || 0)}`}</Resource>}
+            label={`${row?.gpu_device_core_allocated || 0}/${value || 0}`}
+          />
+        );
+      },
     },
   ];
 
