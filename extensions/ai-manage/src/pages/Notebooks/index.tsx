@@ -85,21 +85,19 @@ const getColumns = ({ MoreActions }: any): Column[] => {
       field: 'replica_specs',
       canHide: true,
       render: (_, row) => {
-        const {
-          custom_cpu = '--',
-          custom_memory = '--',
-          custom_gpu = '--',
-          custom_gpu_type = '',
-          custom_gpu_memory = '--',
-        } = row?.replica_specs as Record<string, any>;
+        const custom_cpu = get(row?.replica_specs, 'custom_cpu', '-');
+        const custom_memory = get(row?.replica_specs, 'custom_memory', '-');
+        const custom_gpu = get(row?.replica_specs, 'custom_gpu', '-');
+        const custom_gpu_type = get(row?.replica_specs, 'custom_gpu_type', '-');
+        const custom_gpu_memory = get(row?.replica_specs, 'custom_gpu_memory', '-');
 
         return (
           <Field
             label={
               <FieldLabel>
                 {`
-              ${custom_gpu_type} ${custom_gpu_memory || '--'}${custom_gpu_memory ? 'G *' : ''} ${
-                  custom_gpu || '--'
+              ${custom_gpu_type} ${custom_gpu_memory || '-'}${custom_gpu_memory ? 'G *' : ''} ${
+                  custom_gpu || '-'
                 }${custom_gpu ? t('Core') : ''}`}
               </FieldLabel>
             }
@@ -115,8 +113,8 @@ const getColumns = ({ MoreActions }: any): Column[] => {
       field: 'disk',
       canHide: true,
       render: (_, row) => {
-        const { custom_data_disk_size = '--', custom_system_disk_size = '--' } =
-          row?.replica_specs as Record<string, any>;
+        const custom_data_disk_size = get(row?.replica_specs, 'custom_data_disk_size', '-');
+        const custom_system_disk_size = get(row?.replica_specs, 'custom_system_disk_size', '-');
         return (
           <>
             <div>

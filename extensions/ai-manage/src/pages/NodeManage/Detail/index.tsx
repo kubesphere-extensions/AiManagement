@@ -20,6 +20,7 @@ import { useQuery } from 'react-query';
 
 import { authKey } from '../contants';
 import { TaintSingleModal } from '../TaintModal/TaintSingleModal';
+import ResourceLink from '../../../components/ResourceLink';
 import ObjectEditModal from '../ObjectEdit';
 import { AttributesTitle } from './styles';
 
@@ -166,7 +167,7 @@ function NodeDetail() {
       },
       {
         label: t('Belonging Compute Pool'),
-        value: node?.node_compute_group || '共享计算池',
+        value: <ResourceLink type="pool" id={node?.node_compute_group} />,
       },
       {
         label: 'IPM IP',

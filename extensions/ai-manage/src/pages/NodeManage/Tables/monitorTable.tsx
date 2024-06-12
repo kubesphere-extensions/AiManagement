@@ -42,6 +42,7 @@ import {
   getReady,
 } from './contants';
 import { DataTable, Column } from '../../../components/DataTable';
+import ResourceLink from '../../../components/ResourceLink';
 
 interface Props {
   renderTabs: () => React.ReactNode;
@@ -763,7 +764,7 @@ function Node({ renderTabs, setShowTab, tab }: Props) {
       fixed: 'left',
       width: 120,
       render: (_v, row) => {
-        return computedGroup?.[row?.name]?.gpu_node_compute_group || '共享计算池';
+        return <ResourceLink type="pool" id={computedGroup?.[row?.name]?.gpu_node_compute_group} />;
       },
     },
     {

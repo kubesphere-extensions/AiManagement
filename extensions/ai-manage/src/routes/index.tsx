@@ -7,8 +7,9 @@ import NodeManage from '../pages/NodeManage';
 import FaultLog from '../pages/FaultLog';
 import Training from '../pages/Traing';
 import Xid from '../pages/Xid';
-import PerformanceMonitor from '../pages/PerformanceMonitor';
-import IbNetworkMonitor from '../pages/IbNetworkMonitor';
+import PerformanceMonitor from '../pages/Dashboard/PerformanceMonitor';
+import IbNetworkMonitor from '../pages/Dashboard/IbNetworkMonitor';
+import NpuMonitor from '../pages/Dashboard/NpuMonitor';
 import Notebooks from '../pages/Notebooks';
 import ResourceGroup from '../pages/ResourceGroup';
 
@@ -40,6 +41,7 @@ export default [
         path: ':cluster/ib-networkwork-monitor',
         element: <IbNetworkMonitor />,
       },
+      { path: ':cluster/npu-monitor', element: <NpuMonitor /> },
       {
         path: ':cluster/nodes',
         element: <NodeManage />,

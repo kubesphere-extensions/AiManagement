@@ -4,6 +4,7 @@ import { Nodes } from '@kubed/icons';
 import { Link } from 'react-router-dom';
 import { StatusIndicator } from '@ks-console/shared';
 import { DataTable, Column } from '../../../components/DataTable';
+import ResourceLink from '../../../components/ResourceLink';
 import { FieldLabel } from '../style';
 
 interface StatusMap {
@@ -57,7 +58,7 @@ function ListTable({ renderTabs }: Props) {
       field: 'gpu_node_compute_group',
       canHide: true,
       rowSpan: true,
-      render: v => v || '共享计算池',
+      render: v => <ResourceLink type="pool" id={v} />,
     },
     {
       title: t('IB 卡数量'),

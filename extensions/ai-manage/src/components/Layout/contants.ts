@@ -24,6 +24,19 @@ const getPerNav = () => {
   return [];
 };
 
+const getNPUNav = () => {
+  if (globals?.config?.enable_npu) {
+    return [
+      {
+        name: 'npu-monitor',
+        title: 'NPU 监控',
+        icon: 'monitor',
+      },
+    ];
+  }
+  return [];
+};
+
 export const navs = [
   {
     name: 'overview',
@@ -32,6 +45,7 @@ export const navs = [
       { name: 'overview', title: 'Dashboard', icon: 'dashboard' },
       { name: 'dashboard', title: 'Monitor Dashboard', icon: 'monitor' },
       ...getPerNav(),
+      ...getNPUNav(),
       ...getIbNav(),
     ],
   },

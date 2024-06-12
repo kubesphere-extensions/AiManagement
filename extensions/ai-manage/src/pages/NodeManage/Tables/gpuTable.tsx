@@ -6,6 +6,7 @@ import { StatusIndicator } from '@ks-console/shared';
 import { toPercentage } from './contants';
 import { FieldLabel, Resource } from '../style';
 import { DataTable, Column } from '../../../components/DataTable';
+import ResourceLink from '../../../components/ResourceLink';
 
 interface StatusMap {
   [key: string]: string;
@@ -64,7 +65,7 @@ function GpuTable({ renderTabs }: Props) {
       rowSpan: true,
       width: 120,
       fixed: 'left',
-      render: (v, row) => v || '共享计算池',
+      render: v => <ResourceLink type="pool" id={v} />,
     },
     {
       title: t('GPU 数量'),
@@ -150,7 +151,9 @@ function GpuTable({ renderTabs }: Props) {
     {
       title: t('Pod'),
       field: 'exported_pod',
-      render: value => (value ? value : '-'),
+      render: (value, row) => (
+        <ResourceLink type="pod" id={value} namespace={row?.exported_namespace} />
+      ),
     },
   ];
 

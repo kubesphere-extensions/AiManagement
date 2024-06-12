@@ -6,6 +6,7 @@ import { StatusIndicator } from '@ks-console/shared';
 import { toPercentage } from './contants';
 import { FieldLabel, Resource } from '../style';
 import { DataTable, Column } from '../../../components/DataTable';
+import ResourceLink from '../../../components/ResourceLink';
 import { CollapseWrap, BaseTable } from './styles';
 
 interface StatusMap {
@@ -80,7 +81,7 @@ function VGpuTable({ renderTabs }: Props) {
       rowSpan: true,
       width: 120,
       fixed: 'left',
-      render: v => v || '共享计算池',
+      render: v => <ResourceLink type="pool" id={v} />,
     },
     {
       title: t('GPU 数量'),
@@ -164,11 +165,10 @@ function VGpuTable({ renderTabs }: Props) {
         if (+row?.dev_gpu_status === 2) {
           return '-';
         }
+        const v = (value || 0) - (row?.gpu_device_memory_allocated || 0);
         return (
           <Field
-            value={
-              <Resource>{`${(value || 0) - (row?.gpu_device_memory_allocated || 0)} GB`}</Resource>
-            }
+            value={<Resource>{`${v.toFixed(2)} GB`}</Resource>}
             label={`${row?.gpu_device_memory_allocated}/${value || 0} GB`}
           />
         );
@@ -181,9 +181,10 @@ function VGpuTable({ renderTabs }: Props) {
         if (+row?.dev_gpu_status === 2) {
           return '-';
         }
+        const v = (value || 0) - (row?.gpu_device_core_allocated || 0);
         return (
           <Field
-            value={<Resource>{`${(value || 0) - (row?.gpu_device_core_allocated || 0)}`}</Resource>}
+            value={<Resource>{`${v.toFixed(2)}`}</Resource>}
             label={`${row?.gpu_device_core_allocated || 0}/${value || 0}`}
           />
         );

@@ -6,6 +6,7 @@ import { formatTime, StatusIndicator, TableRef } from '@ks-console/shared';
 import { Link } from 'react-router-dom';
 import { useDisclosure } from '@kubed/hooks';
 import { DataTable, Column } from '../../components/DataTable';
+import ResourceLink from '../../components/ResourceLink';
 
 import { FullRow, FullCol, StyledEntity, StyledField, FieldLabel } from './styles';
 import { Waring } from '../../icons';
@@ -57,7 +58,7 @@ function FaultLog() {
       title: t('Belonging Compute Pool'),
       field: 'gpu_node_compute_group',
       canHide: true,
-      render: (v, row) => v || '共享计算池',
+      render: v => <ResourceLink type="pool" id={v} />,
     },
     {
       title: t('Fault ID'),

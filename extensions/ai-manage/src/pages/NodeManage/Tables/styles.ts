@@ -1,4 +1,3 @@
-import { ExtraContainer } from './../../../components/PodsCard/styles';
 import styled from 'styled-components';
 import { Row, Entity, Field, Col, Navs } from '@kubed/components';
 

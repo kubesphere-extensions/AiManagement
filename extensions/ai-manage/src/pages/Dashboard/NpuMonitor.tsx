@@ -9,20 +9,20 @@ const Wrap = styled.div`
   overflow: hidden;
 `;
 
-function Dashboard() {
+function NpuMonitor() {
   const iframeRef: any = useRef(null);
 
   const url = useMemo(() => {
     const grafanaUrl = globals?.config?.grafana ?? 'http://60.216.39.180:31919';
     // eslint-disable-next-line max-len
-    const baseUrl = `${grafanaUrl}/d/5Zr9HhYSk/node-exporter-infiniband?orgId=1&from=now-1h&to=now&theme=light&refresh=10s`;
+    const baseUrl = `${grafanaUrl}/d/FSRKUBPIz/npu-exporter?orgId=1&from=now-1h&to=now&theme=light&refresh=10s`;
     return baseUrl;
   }, []);
 
   return (
     <Wrap>
       <iframe
-        id="my-dashboard"
+        id="npu-dashboard"
         ref={iframeRef}
         src={url}
         width="100%"
@@ -37,4 +37,4 @@ function Dashboard() {
   );
 }
 
-export default Dashboard;
+export default NpuMonitor;

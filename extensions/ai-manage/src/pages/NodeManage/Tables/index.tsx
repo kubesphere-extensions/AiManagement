@@ -5,6 +5,7 @@ import MonitorTable from './monitorTable';
 import GpuTable from './gpuTable';
 import IbNetworkTable from './ibNetworkTable';
 import VGPUTable from './vGPUTable';
+import NpuTable from './npuTable';
 import { TableContent, StyledNav, HiddendNav } from './styles';
 
 function TableWrap() {
@@ -16,8 +17,15 @@ function TableWrap() {
       { id: 'monitor', label: t('Node Monitor') },
       { id: 'list', label: t('Node List') },
       { id: 'gpu', label: t('GPU Monitor') },
-      { id: 'vGPU', label: t('vGPU Monitor') },
     ];
+
+    if (globals?.config?.enable_vgpu) {
+      pageTabs.push({ id: 'vGPU', label: t('vGPU Monitor') });
+    }
+
+    if (globals?.config?.enable_npu) {
+      pageTabs.push({ id: 'npu', label: t('NPU 监控') });
+    }
 
     if (globals?.config?.enable_infiniband_grafana) {
       pageTabs.push({ id: 'ib', label: t('IB Network Card Monitor') });
@@ -43,6 +51,7 @@ function TableWrap() {
         <MonitorTable renderTabs={defaultTabs} setShowTab={setShowTab} tab={tab} />
       )}
       {tab === 'vGPU' && <VGPUTable renderTabs={defaultTabs} />}
+      {tab === 'npu' && <NpuTable renderTabs={defaultTabs} />}
       {tab === 'ib' && <IbNetworkTable renderTabs={defaultTabs} />}
     </TableContent>
   );
