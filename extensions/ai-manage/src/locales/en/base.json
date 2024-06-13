@@ -2,5 +2,5 @@
   "Node Desc": "Basic information, status information, scheduling information of nodes.",
   "Fault Desc": "System detects faults in nodes, GPUs, network cards, hard drives, etc., and performs automatic repairs, as well as recording offline operations and maintenance.",
   "Fault placeholder": "UUID and XID Search",
-  "Xid Desc": "Xid messages are error reports from the NVIDIA driver that are printed to the operating system's kernel log or event log.Xid messages indicate that a general error has occurred with the GPU, most commonly due to incorrect programming of the GPU by the driver or corrupted commands sent to the GPU. These messages may indicate hardware problems, NVIDIA software problems, or user application problems.Translated with DeepL.com (free version)"
+  "Xid Desc": "Error codes are error reports from the graphics card driver that are printed to the operating system's kernel log or event log. Error codes indicate that a general error has occurred with the graphics card, most commonly due to incorrect programming of the card by the driver or corrupted commands sent to the card. These messages may indicate a hardware problem, a graphics card problem, or a user application problem."
 }

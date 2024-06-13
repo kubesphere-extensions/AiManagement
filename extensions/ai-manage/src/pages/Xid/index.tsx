@@ -135,12 +135,7 @@ function Xid() {
   return (
     <div>
       <GlobalStyle />
-      <Banner
-        className="mb12"
-        icon={<Waring2 />}
-        title="Error Code & NVIDIA XidError & Violations"
-        description={t('Xid Desc')}
-      />
+      <Banner className="mb12" icon={<Waring2 />} title="错误码管理" description={t('Xid Desc')} />
       <DataTable
         ref={tableRef}
         tableName="xid"

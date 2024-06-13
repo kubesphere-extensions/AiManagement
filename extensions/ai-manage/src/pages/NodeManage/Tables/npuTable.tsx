@@ -154,23 +154,9 @@ function NpuTable({ renderTabs }: Props) {
           <Field
             value={
               <Resource>
-                <span>{toPercentage(+value)}</span>
+                <span>{value}%</span>
               </Resource>
             }
-          />
-        );
-      },
-    },
-    {
-      title: t('容器 NPU 剩余内存'),
-      field: 'container_npu_total_memory',
-      canHide: true,
-      render: (value, row) => {
-        const v = (+value || 0) - (+row?.container_npu_used_memory || 0);
-        return (
-          <Field
-            value={<Resource>{`${v.toFixed(2)} MB`}</Resource>}
-            label={`${row?.container_npu_used_memory}/${value || 0} MB`}
           />
         );
       },
@@ -184,7 +170,7 @@ function NpuTable({ renderTabs }: Props) {
           <Field
             value={
               <Resource>
-                <span>{toPercentage(+value)}</span>
+                <span>{value}%</span>
               </Resource>
             }
           />
