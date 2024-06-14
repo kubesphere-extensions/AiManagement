@@ -38,7 +38,7 @@ const getNPUNav = () => {
 };
 
 const getHFKav = () => {
-  if (!globals?.config?.enable_hfk) {
+  if (globals?.config?.enable_hfk) {
     return [
       {
         name: 'hexaflake-monitor',
