@@ -3,12 +3,7 @@ import { Link } from 'react-router-dom';
 import { isEmpty, get } from 'lodash';
 
 import { Tooltip, Field } from '@kubed/components';
-import {
-  Column,
-  StatusIndicator,
-  getNodeStatus,
-  getDisplayName,
-} from '@ks-console/shared';
+import { Column, StatusIndicator, getNodeStatus, getDisplayName } from '@ks-console/shared';
 import { Nodes } from '@kubed/icons';
 
 import { FieldLabel, Taints } from '../../../NodeManage/Tables/styles';
@@ -37,11 +32,9 @@ const getColumns = (listData: any, cluster: string): Column[] => [
     sortable: true,
     render: (value, row) => (
       <Field
-        value={(
-          <Link to={`/ai-manage/${cluster}/nodes/master3`}>
-            {getDisplayName(row)}
-          </Link>
-        )}
+        value={
+          <Link to={`/ai-manage/${cluster}/nodes/${row?.name}/status`}>{getDisplayName(row)}</Link>
+        }
         avatar={<Nodes size={40} />}
         label={<FieldLabel>{row.ip || '-'}</FieldLabel>}
       />
