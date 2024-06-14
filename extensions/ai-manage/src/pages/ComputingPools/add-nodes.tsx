@@ -46,7 +46,7 @@ const AddNodes = ({ pool, onClose }: Props) => {
         onSubmit={onSubmit}
         onCancel={() => onClose()}
         parameters={{
-          labelSelector: '!aicp.group/aipods_type',
+          labelSelector: '!aicp.group/aipods_type,aicp.group/role!=master',
         }}
         okText="ADD"
       />

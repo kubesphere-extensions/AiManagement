@@ -36,7 +36,7 @@ const {
 function NodeManage() {
   const ref = useRef<TableRef>();
   const params: Record<string, any> = useParams();
-  const { pool } = useDetailPage();
+  const { pool, getPool } = useDetailPage();
   const { cluster } = params;
 
   const [record, setRecord] = React.useState<any>();
@@ -66,6 +66,7 @@ function NodeManage() {
   );
 
   const onRefresh = () => {
+    getPool();
     listNodeStatic();
     ref?.current?.refetch();
   };
