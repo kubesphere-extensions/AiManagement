@@ -1,16 +1,14 @@
-import React, { useRef, useMemo } from 'react';
+import React, { useMemo } from 'react';
 
 import { Warning } from '@kubed/icons';
 
 import { EmptyTip, Wrap } from './styles';
 
-function NpuMonitor() {
-  const iframeRef: any = useRef(null);
-
+function HfkMonitor() {
   const url = useMemo(() => {
     const grafanaUrl = globals?.config?.grafana;
     // eslint-disable-next-line max-len
-    const baseUrl = `${grafanaUrl}/d/FSRKUBPIz/npu-exporter?orgId=1&from=now-1h&to=now&theme=light&refresh=10s`;
+    const baseUrl = `${grafanaUrl}/d/vlvPlrgnk/hexaflake-gpu-metrics?orgId=1&var-gpu=0-0&var-node_name=hfk01&refresh=10s&from=now-30m&to=now&theme=light`;
     return baseUrl;
   }, []);
 
@@ -26,8 +24,7 @@ function NpuMonitor() {
   return (
     <Wrap>
       <iframe
-        id="npu-dashboard"
-        ref={iframeRef}
+        id="hfk-dashboard"
         src={url}
         width="100%"
         style={{
@@ -41,4 +38,4 @@ function NpuMonitor() {
   );
 }
 
-export default NpuMonitor;
+export default HfkMonitor;

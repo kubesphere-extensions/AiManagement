@@ -1,15 +1,10 @@
 import React, { useRef, useMemo } from 'react';
 import { request } from '@ks-console/shared';
 import { useQuery } from 'react-query';
-import styled from 'styled-components';
 import { Loading } from '@kubed/components';
+import { Warning } from '@kubed/icons';
 
-const Wrap = styled.div`
-  width: 100%;
-  height: 100%;
-  padding-left: 16px;
-  overflow: hidden;
-`;
+import { EmptyTip, Wrap } from './styles';
 
 function Dashboard() {
   const iframeRef: any = useRef(null);
@@ -51,6 +46,15 @@ function Dashboard() {
       .join('')}${configUrl}`;
   }, [data]);
 
+  if (!globals?.config?.grafana) {
+    return (
+      <EmptyTip>
+        <Warning size={30} />
+        请先配置grafana地址！
+      </EmptyTip>
+    );
+  }
+
   return (
     <Wrap>
       {isFetching && <Loading className="page-loading" />}
@@ -66,7 +70,7 @@ function Dashboard() {
           marginLeft: -85,
         }}
         onLoad={onIframeLoad}
-      ></iframe>
+      />
     </Wrap>
   );
 }

@@ -10,6 +10,7 @@ import Xid from '../pages/Xid';
 import PerformanceMonitor from '../pages/Dashboard/PerformanceMonitor';
 import IbNetworkMonitor from '../pages/Dashboard/IbNetworkMonitor';
 import NpuMonitor from '../pages/Dashboard/NpuMonitor';
+import HfkMonitor from '../pages/Dashboard/HexaflakeMonitor';
 import Notebooks from '../pages/Notebooks';
 import ResourceGroup from '../pages/ResourceGroup';
 
@@ -40,6 +41,10 @@ export default [
       {
         path: ':cluster/ib-networkwork-monitor',
         element: <IbNetworkMonitor />,
+      },
+      {
+        path: ':cluster/hexaflake-monitor',
+        element: <HfkMonitor />,
       },
       { path: ':cluster/npu-monitor', element: <NpuMonitor /> },
       {

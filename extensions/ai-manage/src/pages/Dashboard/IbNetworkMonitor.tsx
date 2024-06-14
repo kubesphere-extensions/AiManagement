@@ -1,23 +1,26 @@
 import React, { useRef, useMemo } from 'react';
+import { Warning } from '@kubed/icons';
 
-import styled from 'styled-components';
-
-const Wrap = styled.div`
-  width: 100%;
-  height: 100%;
-  padding-left: 16px;
-  overflow: hidden;
-`;
+import { EmptyTip, Wrap } from './styles';
 
 function Dashboard() {
   const iframeRef: any = useRef(null);
 
   const url = useMemo(() => {
-    const grafanaUrl = globals?.config?.grafana ?? 'http://60.216.39.180:31919';
+    const grafanaUrl = globals?.config?.grafana;
     // eslint-disable-next-line max-len
     const baseUrl = `${grafanaUrl}/d/5Zr9HhYSk/node-exporter-infiniband?orgId=1&from=now-1h&to=now&theme=light&refresh=10s`;
     return baseUrl;
   }, []);
+
+  if (!globals?.config?.grafana) {
+    return (
+      <EmptyTip>
+        <Warning size={30} />
+        请先配置grafana地址！
+      </EmptyTip>
+    );
+  }
 
   return (
     <Wrap>
@@ -32,7 +35,7 @@ function Dashboard() {
           border: 0,
           marginLeft: -85,
         }}
-      ></iframe>
+      />
     </Wrap>
   );
 }

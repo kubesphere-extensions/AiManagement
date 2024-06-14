@@ -37,6 +37,19 @@ const getNPUNav = () => {
   return [];
 };
 
+const getHFKav = () => {
+  if (!globals?.config?.enable_hfk) {
+    return [
+      {
+        name: 'hexaflake-monitor',
+        title: 'Hexaflake 监控',
+        icon: 'monitor',
+      },
+    ];
+  }
+  return [];
+};
+
 export const navs = [
   {
     name: 'overview',
@@ -47,6 +60,7 @@ export const navs = [
       ...getPerNav(),
       ...getNPUNav(),
       ...getIbNav(),
+      ...getHFKav(),
     ],
   },
   {

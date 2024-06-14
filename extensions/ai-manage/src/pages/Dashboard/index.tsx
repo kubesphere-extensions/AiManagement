@@ -1,26 +1,11 @@
 import React, { useMemo } from 'react';
 import { request } from '@ks-console/shared';
 import { useQuery } from 'react-query';
-import styled from 'styled-components';
+
 import { Loading } from '@kubed/components';
 import { Warning } from '@kubed/icons';
 
-const Wrap = styled.div`
-  width: 100%;
-  height: 100%;
-  padding-left: 16px;
-  overflow: hidden;
-`;
-
-const EmptyTip = styled.div`
-  width: 100%;
-  height: 400px;
-  padding-left: 16px;
-  display: flex;
-  font-size: 14px;
-  align-items: center;
-  justify-content: center;
-`;
+import { EmptyTip, Wrap } from './styles';
 
 function Dashboard() {
   const { data, isFetching } = useQuery(['fetchGpuNode'], async () => {
@@ -32,7 +17,7 @@ function Dashboard() {
   });
 
   const url = useMemo(() => {
-    const defaultHost = globals?.config?.grafana ?? 'http://60.216.39.180:31919';
+    const defaultHost = globals?.config?.grafana;
     const baseUrl = `${defaultHost}/d/Oxed_c6Wz/nvidia-dcgm-exporter-dashboard?orgId=1`;
     const configUrl = '&var-gpu=All&theme=light&refresh=10s';
     const nodeSet = new Set<string>([]);
@@ -69,7 +54,7 @@ function Dashboard() {
           border: 0,
           marginLeft: -85,
         }}
-      ></iframe>
+      />
     </Wrap>
   );
 }

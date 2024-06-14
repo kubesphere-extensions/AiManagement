@@ -8,6 +8,7 @@ export const TableWrapper = styled(Card)`
 export const TableMain = styled.div`
   // padding: 0 12px 12px;
   overflow-x: auto;
+  overflow-y: hidden;
   &.left-scrolling {
     .table-header-cell-fixed-left-last:after,
     .table-data-cell-fixed-left-last:after {
