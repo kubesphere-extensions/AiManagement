@@ -16,8 +16,11 @@ function TableWrap() {
     const pageTabs: Array<{ id: string; label: string }> = [
       { id: 'monitor', label: t('Node Monitor') },
       { id: 'list', label: t('Node List') },
-      { id: 'gpu', label: t('GPU Monitor') },
     ];
+    const showGPU = globals?.config?.enable_nvidia ?? true;
+    if (showGPU) {
+      pageTabs.push({ id: 'gpu', label: t('GPU Monitor') });
+    }
 
     if (globals?.config?.enable_vgpu) {
       pageTabs.push({ id: 'vGPU', label: t('vGPU Monitor') });

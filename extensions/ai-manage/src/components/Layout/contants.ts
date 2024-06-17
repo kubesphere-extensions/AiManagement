@@ -1,3 +1,17 @@
+const getNvidiaNav = () => {
+  const showNvidia = globals?.config?.enable_nvidia ?? true;
+  if (showNvidia) {
+    return [
+      {
+        name: 'dashboard',
+        title: 'Monitor Dashboard',
+        icon: 'monitor',
+      },
+    ];
+  }
+  return [];
+};
+
 const getIbNav = () => {
   if (globals?.config?.enable_infiniband_grafana) {
     return [
@@ -56,7 +70,7 @@ export const navs = [
     title: '',
     children: [
       { name: 'overview', title: 'Dashboard', icon: 'dashboard' },
-      { name: 'dashboard', title: 'Monitor Dashboard', icon: 'monitor' },
+      ...getNvidiaNav(),
       ...getPerNav(),
       ...getNPUNav(),
       ...getIbNav(),
