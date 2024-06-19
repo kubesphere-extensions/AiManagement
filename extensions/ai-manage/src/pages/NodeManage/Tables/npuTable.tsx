@@ -161,22 +161,22 @@ function NpuTable({ renderTabs }: Props) {
         );
       },
     },
-    {
-      title: t('容器 NPU 利用率'),
-      field: 'container_npu_utilization',
-      canHide: true,
-      render: value => {
-        return (
-          <Field
-            value={
-              <Resource>
-                <span>{value}%</span>
-              </Resource>
-            }
-          />
-        );
-      },
-    },
+    // {
+    //   title: t('容器 NPU 利用率'),
+    //   field: 'container_npu_utilization',
+    //   canHide: true,
+    //   render: value => {
+    //     return (
+    //       <Field
+    //         value={
+    //           <Resource>
+    //             <span>{value}%</span>
+    //           </Resource>
+    //         }
+    //       />
+    //     );
+    //   },
+    // },
     {
       title: t('命名空间'),
       field: 'exported_namespace',
