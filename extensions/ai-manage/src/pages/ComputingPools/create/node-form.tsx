@@ -88,7 +88,7 @@ const NodeSelectors = ({
           rowKey="name"
           selectType="checkbox"
           tableName="select_nodes"
-          url={getResourceUrl()}
+          url={getResourceUrl(params)}
           columns={getColumns()}
           parameters={parameters}
           format={(item: any) => ({ ...params, ...mapper(item) })}
