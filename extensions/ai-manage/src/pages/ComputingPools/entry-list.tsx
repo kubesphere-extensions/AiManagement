@@ -10,6 +10,7 @@ import EditModal from './edit';
 import AddNodes from './add-nodes';
 import RemoveNodes from './remove-nodes';
 import DeleteModal from './delete';
+import { transformRequestParams } from './utils';
 
 const getColumns = (aiPodFilters: AiPodFilter[]): Column<Pool>[] => [
   {
@@ -181,6 +182,7 @@ const EntryList = () => {
         url="/kapis/aicp.kubesphere.io/v1/resource_pool"
         columns={columns}
         serverDataFormat={formatServerData}
+        transformRequestParams={transformRequestParams}
         toolbarRight={(
           <Button color="secondary" onClick={() => setVisible('create')} shadow>
             {t('Create computing pools')}
