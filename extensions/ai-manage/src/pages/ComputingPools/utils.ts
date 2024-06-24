@@ -7,6 +7,6 @@ export const transformRequestParams = (params: Record<string, any>) => {
   // requestParams.labelSelector = '!aicp.group/aipods_type';
 
   requestParams.limit = pageSize;
-  requestParams.page = pageIndex ?? 0;
+  requestParams.page = (pageIndex ?? 0) + 1;
   return requestParams;
 };
