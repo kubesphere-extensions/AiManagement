@@ -6,7 +6,7 @@ export const transformRequestParams = (params: Record<string, any>) => {
   const requestParams = withTypeSelectParams({ ...parameters, ...rest }, type);
   // requestParams.labelSelector = '!aicp.group/aipods_type';
 
-  // requestParams.limit = pageSize;
-  // requestParams.page = pageIndex + 1;
+  requestParams.limit = pageSize;
+  requestParams.page = pageIndex ?? 0;
   return requestParams;
 };
