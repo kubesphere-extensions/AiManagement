@@ -157,7 +157,7 @@ function NodeManage() {
         rowKey="name"
         tableName="nodes"
         parameters={{
-          labelSelector: `aicp.group/aipods_type=${pool?.aipods_type}`,
+          labelSelector: `aicp.group/compute_group=${pool?.pool_id}`,
         }}
         columns={columns}
         transformRequestParams={transformRequestParams}

@@ -46,7 +46,7 @@ const RemoveNodes = ({ pool, onClose }: Props) => {
         onSubmit={onSubmit}
         onCancel={() => onClose()}
         parameters={{
-          labelSelector: `aicp.group/aipods_type=${pool.aipods_type}`,
+          labelSelector: `aicp.group/compute_group=${pool.pool_id}`,
         }}
         okText="REMOVE"
       />
