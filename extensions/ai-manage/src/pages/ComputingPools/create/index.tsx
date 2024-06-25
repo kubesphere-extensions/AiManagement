@@ -77,7 +77,7 @@ const CreateModal = ({ aiPodFilters, onClose }: Props) => {
             setCurrent={setCurrent}
             onCancel={() => onClose()}
             parameters={{
-              labelSelector: '!aicp.group/aipods_type,aicp.group/role!=master',
+              labelSelector: '!aicp.group/compute_group,aicp.group/role!=master',
             }}
           />
         )
