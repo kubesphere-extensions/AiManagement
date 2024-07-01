@@ -7,10 +7,6 @@ import NodeManage from '../pages/NodeManage';
 import FaultLog from '../pages/FaultLog';
 import Training from '../pages/Traing';
 import Xid from '../pages/Xid';
-import PerformanceMonitor from '../pages/Dashboard/PerformanceMonitor';
-import IbNetworkMonitor from '../pages/Dashboard/IbNetworkMonitor';
-import NpuMonitor from '../pages/Dashboard/NpuMonitor';
-import HfkMonitor from '../pages/Dashboard/HexaflakeMonitor';
 import Notebooks from '../pages/Notebooks';
 import ResourceGroup from '../pages/ResourceGroup';
 
@@ -20,33 +16,18 @@ import ComputingPools from '../pages/ComputingPools';
 import poolDetailRouters from '../pages/ComputingPools/Detail/router';
 import traingDetailRouters from '../pages/Traing/Detail/router';
 
+import Configs from '../pages/System';
+
 export default [
   {
     path: '/ai-manage',
     element: <Layout />,
     children: [
-      { path: '', element: <Layout /> },
+      { path: ':cluster/:xxx', element: <Dashboard /> },
       {
         path: ':cluster/overview',
         element: <Overview />,
       },
-      {
-        path: ':cluster/dashboard',
-        element: <Dashboard />,
-      },
-      {
-        path: ':cluster/performance-monitor',
-        element: <PerformanceMonitor />,
-      },
-      {
-        path: ':cluster/ib-networkwork-monitor',
-        element: <IbNetworkMonitor />,
-      },
-      {
-        path: ':cluster/hexaflake-monitor',
-        element: <HfkMonitor />,
-      },
-      { path: ':cluster/npu-monitor', element: <NpuMonitor /> },
       {
         path: ':cluster/nodes',
         element: <NodeManage />,
@@ -74,6 +55,10 @@ export default [
       {
         path: ':cluster/resources',
         element: <ResourceGroup />,
+      },
+      {
+        path: ':cluster/config',
+        element: <Configs />,
       },
     ],
   },

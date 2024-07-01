@@ -1,14 +1,16 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useMemo } from 'react';
 import { Outlet, useLocation, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { Computing } from '@kubed/icons';
 import { useQuery } from 'react-query';
 import { get, set, uniq, isArray } from 'lodash';
-
+import { useStore } from '@kubed/stook';
 import { NavMenu, NavTitle, useGlobalStore, request, getActions } from '@ks-console/shared';
+
 import { navs as navMenus } from './contants';
 import ClusterSelect from './clusterSelect';
-
+import routers from '../../routes';
+import Dashboard from '../../pages/Dashboard';
 interface PageStyleProps {
   top: number;
 }
@@ -166,22 +168,80 @@ function ListLayout(): JSX.Element {
   const { getNav, setNav } = useGlobalStore();
 
   let navs = getNav(navKey);
+  const [, setConfigs] = useStore('configs');
 
   useQuery(
     ['rule'],
     async () => {
-      return await fetchRules({ cluster, name: globals.user.username });
+      return fetchRules({ cluster, name: globals.user.username });
     },
     {
       enabled: !!cluster,
     },
   );
 
+  const { data } = useQuery(['config_data', []], (): Promise<any> => {
+    const url = '/kapis/aicp.kubesphere.io/v1/gpu/list_gpu_dashboard_config';
+
+    return request(url).then(res => {
+      if ((res as any)?.ret_code === 0) {
+        const result = res?.data ?? [];
+
+        let copyRouters = [...routers];
+
+        const configRouters = result?.map((item: any) => {
+          return {
+            path: `:cluster/${item.web_router}`,
+            element: <Dashboard />,
+          };
+        });
+        copyRouters.forEach((item: any) => {
+          if (item.path === '/ai-manage') {
+            item.children = [...configRouters, ...item.children];
+          }
+        });
+        globals.context.registerExtension({ routers: copyRouters });
+        setConfigs(result);
+        return result;
+      }
+    });
+  });
+
+  const configMenus = useMemo(() => {
+    return (
+      data &&
+      data
+        .filter((item: any) => item?.enable_dashboard === '1')
+        .map((item: any) => ({
+          title: item?.dashboard_name ?? '',
+          name: item?.web_router,
+          icon: 'monitor',
+          isConfig: true,
+        }))
+    );
+  }, [data]);
+
   useEffect(() => {
-    if (!navs) {
-      setNav(navKey, navMenus);
-    }
-  }, []);
+    const children = configMenus?.length
+      ? [...configMenus, { name: 'config', title: '监控配置', icon: 'hammer' }]
+      : [{ name: 'config', title: '监控配置', icon: 'hammer' }];
+
+    const cMenus = {
+      name: 'configs',
+      title: '监控管理',
+      children,
+    };
+
+    const overview = [
+      {
+        name: 'Overview',
+        title: '',
+        children: [{ name: 'overview', title: 'Dashboard', icon: 'dashboard' }],
+      },
+    ];
+    const menus = [...overview, cMenus, ...navMenus];
+    setNav(navKey, menus);
+  }, [configMenus]);
 
   return (
     <>

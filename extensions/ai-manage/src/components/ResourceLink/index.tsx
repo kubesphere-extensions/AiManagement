@@ -6,6 +6,7 @@ interface Props {
   type: string;
   id: string;
   namespace?: string;
+  name?: string;
 }
 
 const LinkWrap = styled.span`
@@ -15,13 +16,13 @@ const LinkWrap = styled.span`
   }
 `;
 
-function ResourceLink({ type, id, namespace }: Props) {
+function ResourceLink({ type, id, namespace, name }: Props) {
   const { cluster } = useParams();
   if (type === 'pool') {
     return id ? (
       <LinkWrap>
         <Link className="link-color" to={`/ai-manage/${cluster}/pools/${id}/nodes`}>
-          {id}
+          {name || id}
         </Link>
       </LinkWrap>
     ) : (

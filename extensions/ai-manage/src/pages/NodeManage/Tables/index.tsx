@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import { useStore } from '@kubed/stook';
 
 import MonitorTable from './monitorTable';
@@ -11,38 +11,44 @@ import { TableContent, StyledNav, HiddendNav } from './styles';
 function TableWrap() {
   const [tab, setTab] = useStore('current_tab', 'monitor');
   const [showTab, setShowTab] = useState(true);
+  const [configs] = useStore('configs');
 
-  function generatePageTabs(): Array<{ id: string; label: string }> {
+  const getpageTabs = useCallback(() => {
     const pageTabs: Array<{ id: string; label: string }> = [
       { id: 'monitor', label: t('Node Monitor') },
       { id: 'list', label: t('Node List') },
     ];
-    const showGPU = globals?.config?.enable_nvidia ?? true;
-    if (showGPU) {
-      pageTabs.push({ id: 'gpu', label: t('GPU Monitor') });
+    if (configs?.length) {
+      configs.forEach((item: any) => {
+        if (item.enable_table_view === '1') {
+          switch (item?.dashboard_id) {
+            case '1':
+              pageTabs.push({ id: 'gpu', label: t('GPU Monitor') });
+              break;
+            case '6':
+              pageTabs.push({ id: 'vGPU', label: t('vGPU Monitor') });
+              break;
+            case '3':
+              pageTabs.push({ id: 'npu', label: t('NPU 监控') });
+              break;
+            case '4':
+              pageTabs.push({ id: 'ib', label: t('Network Card Monitor') });
+              break;
+            default:
+              break;
+          }
+        }
+      });
     }
-
-    if (globals?.config?.enable_vgpu) {
-      pageTabs.push({ id: 'vGPU', label: t('vGPU Monitor') });
-    }
-
-    if (globals?.config?.enable_npu) {
-      pageTabs.push({ id: 'npu', label: t('NPU 监控') });
-    }
-
-    if (globals?.config?.enable_infiniband_grafana) {
-      pageTabs.push({ id: 'ib', label: t('IB Network Card Monitor') });
-    }
-
     return pageTabs;
-  }
+  }, [configs]);
 
-  const pageTabs = generatePageTabs();
-
-  const navs = pageTabs.map(item => ({
-    label: item.label,
-    value: item.id,
-  }));
+  const navs = useMemo(() => {
+    return getpageTabs()?.map(item => ({
+      label: item.label,
+      value: item.id,
+    }));
+  }, [getpageTabs]);
 
   const defaultTabs = () => <HiddendNav className="mr12" data={navs} />;
 

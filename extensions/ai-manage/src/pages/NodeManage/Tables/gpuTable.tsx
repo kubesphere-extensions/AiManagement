@@ -65,7 +65,9 @@ function GpuTable({ renderTabs }: Props) {
       rowSpan: true,
       width: 120,
       fixed: 'left',
-      render: v => <ResourceLink type="pool" id={v} />,
+      render: (v, row) => (
+        <ResourceLink type="pool" id={v} name={row?.gpu_node_compute_group_name} />
+      ),
     },
     {
       title: t('GPU 数量'),

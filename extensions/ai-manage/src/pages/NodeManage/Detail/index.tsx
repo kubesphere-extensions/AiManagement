@@ -167,7 +167,13 @@ function NodeDetail() {
       },
       {
         label: t('Belonging Compute Pool'),
-        value: <ResourceLink type="pool" id={node?.node_compute_group} />,
+        value: (
+          <ResourceLink
+            type="pool"
+            id={node?.node_compute_group}
+            name={node?.node_compute_group_name}
+          />
+        ),
       },
       {
         label: 'IPM IP',
@@ -194,6 +200,13 @@ function NodeDetail() {
         value: node?.node_location_number || '-',
       },
     ];
+  };
+
+  const getNumber = (v?: string | number) => {
+    if (!isNil(v) && v) {
+      return `${v} Gb/s`;
+    }
+    return '-';
   };
 
   const getConfigInfoAttrs = () => {
@@ -228,7 +241,7 @@ function NodeDetail() {
       },
       {
         label: t('Compute IB Network Card Configuration'),
-        value: !isNil(node?.node_ib_count_compute) ? `${node?.node_ib_count_compute} G` : '-',
+        value: getNumber(node?.node_ib_count_compute),
       },
       {
         label: t('Number of Compute IB Network Cards'),
@@ -236,11 +249,19 @@ function NodeDetail() {
       },
       {
         label: t('Storage IB Network Card Configuration'),
-        value: !isNil(node?.node_ib_bw_storage) ? `${node?.node_ib_bw_storage} G` : '-',
+        value: getNumber(node?.node_ib_bw_storage),
       },
       {
         label: t('Number of Storage IB Network Cards'),
         value: node?.node_ib_count_storage ?? '-',
+      },
+      {
+        label: t('管理网卡配置'),
+        value: getNumber(node?.node_ib_bw_manager),
+      },
+      {
+        label: t('管理网卡数量'),
+        value: node?.node_ib_count_manager ?? '-',
       },
     ];
   };

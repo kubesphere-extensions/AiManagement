@@ -58,7 +58,9 @@ function FaultLog() {
       title: t('Belonging Compute Pool'),
       field: 'gpu_node_compute_group',
       canHide: true,
-      render: v => <ResourceLink type="pool" id={v} />,
+      render: (v, row) => (
+        <ResourceLink type="pool" id={v} name={row?.gpu_node_compute_group_name} />
+      ),
     },
     {
       title: t('Fault ID'),

@@ -675,7 +675,7 @@ function Node({ renderTabs, setShowTab, tab }: Props) {
         },
       },
       {
-        title: t('正常 IB 卡数量'),
+        title: t('正常网卡数量'),
         field: 'ib_available',
         canHide: true,
         render: (_v, row) => {
@@ -689,23 +689,33 @@ function Node({ renderTabs, setShowTab, tab }: Props) {
         },
       },
       {
-        title: t('计算 IB 网卡数量'),
+        title: t('计算网卡数量'),
         field: 'node_ib_bw_compute',
         canHide: true,
         render: (_v, row) => {
           const label = get(listData, [row.name, 'node_ib_bw_compute']);
           const value = get(listData, [row.name, 'node_ib_count_compute'], '-');
-          return <Field label={label ? `${label}G` : '-'} value={value} />;
+          return <Field label={label ? `${label}Gb/s` : '-'} value={value} />;
         },
       },
       {
-        title: t('存储 IB 网卡数量'),
+        title: t('存储网卡数量'),
         field: 'node_ib_bw_storage',
         canHide: true,
         render: (_v, row) => {
           const label = get(listData, [row.name, 'node_ib_bw_storage']);
           const value = get(listData, [row.name, 'node_ib_count_storage'], '-');
-          return <Field label={label ? `${label}G` : '-'} value={value} />;
+          return <Field label={label ? `${label}Gb/s` : '-'} value={value} />;
+        },
+      },
+      {
+        title: t('管理网卡数量'),
+        field: 'node_ib_bw_manager',
+        canHide: true,
+        render: (_v, row) => {
+          const label = get(listData, [row.name, 'node_ib_bw_manager']);
+          const value = get(listData, [row.name, 'node_ib_count_manager'], '-');
+          return <Field label={label ? `${label}Gb/s` : '-'} value={value} />;
         },
       },
     ] as Column[];
@@ -764,7 +774,13 @@ function Node({ renderTabs, setShowTab, tab }: Props) {
       fixed: 'left',
       width: 120,
       render: (_v, row) => {
-        return <ResourceLink type="pool" id={computedGroup?.[row?.name]?.gpu_node_compute_group} />;
+        return (
+          <ResourceLink
+            type="pool"
+            id={computedGroup?.[row?.name]?.gpu_node_compute_group}
+            name={computedGroup?.[row?.name]?.gpu_node_compute_group_name}
+          />
+        );
       },
     },
     {

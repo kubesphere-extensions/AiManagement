@@ -22,10 +22,10 @@
   "GPU Memory": "GPU 显存",
   "Number of GPU Cards": "GPU 卡数",
   "NVLINK Quantity": "NVLINK 数量",
-  "Compute IB Network Card Configuration": "计算 IB 网卡配置",
-  "Number of Compute IB Network Cards": "计算 IB 网卡数量",
-  "Storage IB Network Card Configuration": "存储 IB 网卡配置",
-  "Number of Storage IB Network Cards": "存储 IB 网卡数量",
+  "Compute IB Network Card Configuration": "计算网卡配置",
+  "Number of Compute IB Network Cards": "计算网卡数量",
+  "Storage IB Network Card Configuration": "存储网卡配置",
+  "Number of Storage IB Network Cards": "存储网卡数量",
   "Fault Log": "故障记录",
   "Maintenance Log": "维护日志",
   "Create New Log": "新建日志",
@@ -44,6 +44,6 @@
   "Not ready": "未就绪",
   "Availability of NVLINK": "是否有NVLINK",
   "GPU allocated":"已分配 GPU",
-  "IB Network Card Monitor":"IB 网卡监控",
+  "Network Card Monitor":"网卡监控",
   "vGPU Monitor": "vGPU 监控"
 }

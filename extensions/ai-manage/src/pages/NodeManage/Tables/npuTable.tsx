@@ -64,7 +64,9 @@ function NpuTable({ renderTabs }: Props) {
       rowSpan: true,
       width: 120,
       fixed: 'left',
-      render: v => <ResourceLink type="pool" id={v} />,
+      render: (v, row) => (
+        <ResourceLink type="pool" id={v} name={row?.npu_node_compute_group_name} />
+      ),
     },
     {
       title: t('NPU 状态 / 网卡数'),

@@ -58,17 +58,19 @@ function ListTable({ renderTabs }: Props) {
       field: 'gpu_node_compute_group',
       canHide: true,
       rowSpan: true,
-      render: v => <ResourceLink type="pool" id={v} />,
+      render: (v, row) => (
+        <ResourceLink type="pool" id={v} name={row.gpu_node_compute_group_name} />
+      ),
     },
     {
-      title: t('IB 卡数量'),
+      title: t('网卡数量'),
       field: 'device_num',
       canHide: true,
       rowSpan: true,
       render: v => v || '-',
     },
     {
-      title: t('计算 IB 卡'),
+      title: t('计算网卡'),
       field: 'ib_bw_compute',
       canHide: true,
       rowSpan: true,
@@ -77,7 +79,16 @@ function ListTable({ renderTabs }: Props) {
       ),
     },
     {
-      title: t('存储 IB 卡'),
+      title: t('管理网卡数量'),
+      field: 'ib_bw_manager',
+      canHide: true,
+      rowSpan: true,
+      render: (v, row) => (
+        <Field label={v ? `${v} Gb/s` : '-'} value={row.ib_count_manager || '-'} />
+      ),
+    },
+    {
+      title: t('存储网卡'),
       field: 'ib_bw_storage',
       canHide: true,
       rowSpan: true,
@@ -86,13 +97,13 @@ function ListTable({ renderTabs }: Props) {
       ),
     },
     {
-      title: t('IB 设备名称'),
+      title: t('网卡设备名称'),
       field: 'ib_device',
       canHide: true,
       render: value => (value ? value : '-'),
     },
     {
-      title: t('IB 状态'),
+      title: t('网卡状态'),
       field: 'ib_status',
       canHide: true,
       render: (value: string) => {
@@ -111,7 +122,7 @@ function ListTable({ renderTabs }: Props) {
       render: value => (value ? value : '-'),
     },
     {
-      title: t('IB 板卡号 / IB 固件版本'),
+      title: t('网卡板卡号 / 网卡固件版本'),
       field: 'ib_board_id',
       canHide: true,
       render: (_v, row) => (
@@ -132,8 +143,8 @@ function ListTable({ renderTabs }: Props) {
     const data = serverData?.data || [];
     const dataGroup = new Map();
     // 合并数据，处理单元格合并
-    data.forEach((item: any) => {
-      item.key = `${item.gpu_node_id}${item.ib_device}`;
+    data.forEach((item: any, index: number) => {
+      item.key = `${item.gpu_node_id}${item.ib_device}${index}`;
       if (dataGroup.has(item.gpu_node_id)) {
         const group = dataGroup.get(item.gpu_node_id);
         if (group[0].rowspan) {
