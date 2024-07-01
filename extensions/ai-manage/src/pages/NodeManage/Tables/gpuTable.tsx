@@ -167,6 +167,9 @@ function GpuTable({ renderTabs }: Props) {
     data.forEach((item: any) => {
       if (dataGroup.has(item.gpu_node_id)) {
         const group = dataGroup.get(item.gpu_node_id);
+        if (group[0].rowspan) {
+          group[0].rowspan++;
+        }
         group.push(item);
       } else {
         dataGroup.set(item.gpu_node_id, [{ ...item, rowspan: 1 }]);
