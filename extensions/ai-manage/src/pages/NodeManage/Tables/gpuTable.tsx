@@ -71,7 +71,7 @@ function GpuTable({ renderTabs }: Props) {
     },
     {
       title: t('GPU 数量'),
-      field: 'gpu_num',
+      field: 'dev_gpu_available',
       canHide: true,
       rowSpan: true,
       width: 80,
@@ -167,15 +167,9 @@ function GpuTable({ renderTabs }: Props) {
     data.forEach((item: any) => {
       if (dataGroup.has(item.gpu_node_id)) {
         const group = dataGroup.get(item.gpu_node_id);
-        if (group[0].rowspan) {
-          group[0].rowspan++;
-        }
-        if (group[0]?.dev_gpu_uuid) {
-          group[0].gpu_num++;
-        }
         group.push(item);
       } else {
-        dataGroup.set(item.gpu_node_id, [{ ...item, rowspan: 1, gpu_num: 1 }]);
+        dataGroup.set(item.gpu_node_id, [{ ...item, rowspan: 1 }]);
       }
     });
     const newArray = Array.from(dataGroup.values());
