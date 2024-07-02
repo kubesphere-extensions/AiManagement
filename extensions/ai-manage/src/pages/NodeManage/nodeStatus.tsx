@@ -18,6 +18,7 @@ import {
   ProgressBarContainer,
   ProgressBlock,
   IconWrap,
+  StyleWrap,
 } from './style';
 
 interface ItemData {
@@ -47,13 +48,14 @@ function NodeStatus() {
   ];
 
   const [nodeTotlaCount] = useStore('nodeCount');
+  const [configs] = useStore('configs');
 
   const { data: nodeCount } = useQuery(['fetchCount'], () => {
     return fetchCount({ cluster });
   });
 
   const { data } = useQuery(['fetchStatus'], async () => {
-    return await request.get('/kapis/aicp.kubesphere.io/v1/gpu/get_total_node_status').then(res => {
+    return request.get('/kapis/aicp.kubesphere.io/v1/gpu/get_total_node_status').then(res => {
       if ((res as any)?.ret_code === 0) {
         return res?.data ?? {};
       }
@@ -62,25 +64,43 @@ function NodeStatus() {
 
   const percentages = useMemo(() => {
     const result: ItemData = {};
+    const totleData = {
+      NoSchedule: data?.NoSchedule ?? 0,
+      NotReady: data?.NotReady ?? 0,
+      Ready: data?.Ready ?? 0,
+      Unavailable: data?.Unavailable ?? 0,
+    };
     if (data) {
       let total: number = 0;
 
       // 计算总量
-      for (const key in data) {
-        if (key && key !== 'NumGpu') {
-          total += data[key];
+      for (const key in totleData) {
+        if (key) {
+          total += totleData?.[key as 'NoSchedule'];
         }
       }
 
       // 计算每个项的百分比
 
-      for (const key in data) {
-        const percentage = data[key] / total;
+      for (const key in totleData) {
+        const percentage = totleData?.[key as 'NoSchedule'] / total;
         result[key] = percentage;
       }
     }
     return result;
   }, [data]);
+
+  const [enableGPU, enableNPU, enableHFK, enableVGPU] = useMemo(() => {
+    const showGPU =
+      configs?.find?.((item: any) => item?.dashboard_id === '1')?.enable_table_view === '1';
+    const showNPU =
+      configs?.find?.((item: any) => item?.dashboard_id === '3')?.enable_table_view === '1';
+    const showHFK =
+      configs?.find?.((item: any) => item?.dashboard_id === '5')?.enable_table_view === '1';
+    const showVGPU =
+      configs?.find?.((item: any) => item?.dashboard_id === '6')?.enable_table_view === '1';
+    return [showGPU, showNPU, showHFK, showVGPU];
+  }, [configs]);
 
   const renderStatusTip = () => {
     return (
@@ -114,13 +134,11 @@ function NodeStatus() {
       <ColumnItem>
         <Card className="flex">
           <TextName>{t('Number of nodes')}</TextName>
-          <Row>
-            <StyledCol span={4}>
-              <BgColor>
-                <Text icon="nodes" title={nodeTotlaCount ?? 0} description={t('Node')} />
-              </BgColor>
-            </StyledCol>
-            <StyledCol span={4}>
+          <StyleWrap>
+            <BgColor>
+              <Text icon="nodes" title={nodeTotlaCount ?? 0} description={t('Node')} />
+            </BgColor>
+            {enableGPU && (
               <BgColor>
                 <Text
                   icon={() => (
@@ -128,25 +146,82 @@ function NodeStatus() {
                       <GPU />
                     </IconWrap>
                   )}
-                  title={data?.NumGpu ?? 0}
+                  className="text"
+                  title={data?.num_gpu ?? 0}
                   description="GPU"
                 />
+                <Text
+                  className={data?.num_unavailable_gpu ? 'text-err' : 'text'}
+                  title={data?.num_unavailable_gpu ?? 0}
+                  description="异常"
+                />
               </BgColor>
-            </StyledCol>
-            <StyledCol span={4}>
+            )}
+
+            {enableNPU && (
               <BgColor>
                 <Text
                   icon={() => (
                     <IconWrap>
-                      <Service />
+                      <GPU />
                     </IconWrap>
                   )}
-                  title={nodeCount?.masterNum ?? 0}
-                  description={t('Control plane node')}
+                  title={data?.num_npu ?? 0}
+                  description="NPU"
+                />
+                <Text
+                  className={data?.num_unavailable_npu ? 'text-err' : 'text'}
+                  title={data?.num_unavailable_npu ?? 0}
+                  description="异常"
                 />
               </BgColor>
-            </StyledCol>
-          </Row>
+            )}
+
+            {enableHFK && (
+              <BgColor>
+                <Text
+                  icon={() => (
+                    <IconWrap>
+                      <GPU />
+                    </IconWrap>
+                  )}
+                  title={data?.num_hfk ?? 0}
+                  description="Hexaflake"
+                />
+                <Text
+                  className={data?.num_unavailable_hfk ? 'text-err' : 'text'}
+                  title={data?.num_unavailable_hfk ?? 0}
+                  description="异常"
+                />
+              </BgColor>
+            )}
+
+            {enableVGPU && (
+              <BgColor>
+                <Text
+                  icon={() => (
+                    <IconWrap>
+                      <GPU />
+                    </IconWrap>
+                  )}
+                  title={data?.num_vgpu ?? 0}
+                  description="vGPU"
+                />
+              </BgColor>
+            )}
+
+            <BgColor>
+              <Text
+                icon={() => (
+                  <IconWrap>
+                    <Service />
+                  </IconWrap>
+                )}
+                title={nodeCount?.masterNum ?? 0}
+                description={t('Control plane node')}
+              />
+            </BgColor>
+          </StyleWrap>
         </Card>
       </ColumnItem>
       <ColumnItem>

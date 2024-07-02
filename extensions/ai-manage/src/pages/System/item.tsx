@@ -89,7 +89,7 @@ function Item({ config }: any): JSX.Element {
             <Switch okText="开" offText="关" checked={enable} onChange={handleToggleNav} />
           </Field>
           {TabName?.[config?.dashboard_id as '1'] && (
-            <Field label={TabName?.[config?.dashboard_id as '1']}>
+            <Field label={`节点管理的<${TabName?.[config?.dashboard_id as '1']}>`}>
               <Switch okText="开" offText="关" checked={enableTab} onChange={handleToggleTab} />
             </Field>
           )}

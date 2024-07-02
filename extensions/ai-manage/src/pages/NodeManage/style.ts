@@ -9,42 +9,63 @@ export const StyledCol = styled(Col)`
   overflow: hidden;
 `;
 
+export const StyleWrap = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 8px;
+`;
+
 export const Columns = styled.div`
   display: flex;
   gap: 12px;
   margin-bottom: 12px;
-  margin-right: 12px;
 `;
 
 export const BgColor = styled.div`
-  background: #F9FBFD;
+  background: #f9fbfd;
   padding: 12px;
   border-radius: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex: 1;
 
   &.padding4 {
     padding: 4px 12px;
+  }
+  & .text {
+    white-space: nowrap;
+  }
+  & .text-err {
+    white-space: nowrap;
+    div:first-child {
+      color: #ca2621;
+    }
   }
 `;
 
 export const TextName = styled.div`
   display: flex;
   align-items: center;
-  color: #79879C;
+  color: #79879c;
   font-size: 12px;
   margin-bottom: 8px;
   .mr4 {
     margin-right: 4px;
   }
-`
+`;
 
 export const ColumnItem = styled.div`
-  flex: 0 0 calc(50%);
+  // flex: 0 0 calc(50%);
+  flex: 1;
 `;
 
 export const StatusColor = styled.div`
   position: relative;
   padding-left: 16px;
-  color: #79879C;
+  color: #79879c;
 
   &::before {
     display: block;
@@ -57,17 +78,17 @@ export const StatusColor = styled.div`
     height: 8px;
     border-radius: 50%;
     margin-right: 8px;
-    background-color: #55BC8A;
+    background-color: #55bc8a;
   }
 
   &.err::before {
-    background-color: #CA2621;
+    background-color: #ca2621;
   }
   &.info::before {
-    background-color: #329DCE;
+    background-color: #329dce;
   }
   &.off::before {
-    background-color: #79879C;
+    background-color: #79879c;
   }
   &.waring::before {
     background-color: #f5a623;
@@ -133,4 +154,4 @@ export const Resource = styled.div`
 export const IconWrap = styled.div`
   height: 40px;
   margin-right: 12px;
-`
+`;

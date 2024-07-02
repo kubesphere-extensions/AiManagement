@@ -74,9 +74,8 @@ function Dashboard() {
         width="100%"
         style={{
           height: 'calc(100vh - 116px)',
-          width: 'calc(100vw - 210px)',
+          width: 'calc(100vw - 280px)',
           border: 0,
-          marginLeft: -85,
         }}
       />
     </Wrap>

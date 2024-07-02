@@ -40,7 +40,6 @@ function ModifyInput({
           width={240}
           onChange={e => setValue(e.target.value)}
           placeholder={placeholder}
-          maxLength={30}
         />
         <Check size={20} cursor="pointer" onClick={handleSubmit} color="#55bc8a" />
         <Close
